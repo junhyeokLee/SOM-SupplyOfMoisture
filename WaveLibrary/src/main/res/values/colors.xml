@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#170f4e</color>
+    <color name="colorPrimaryDark">#16214e</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="red">#f16d7a</color>
+    <color name="green">#b7d28d</color>
+    <color name="blue">#98001f39</color>
+    <color name="holo_purple">#ffaa66cc</color>
+    <color name="sky">#0099ff</color>
+    <color name="mint">#00ffff</color>
+    <color name="lightsky">#b3ecff</color>
+</resources>
