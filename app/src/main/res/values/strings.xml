@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">SOM</string>
+    <string name="content_description_water_icon">Water Icon</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_home">메인</string>
+    <string name="title_dashboard">히스토리</string>
+    <string name="title_notifications">알람</string>
+    <string name="title_chart">그래프</string>
+    <string name="title_impormation">개인정보</string>
+
 </resources>

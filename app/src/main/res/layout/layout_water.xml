@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:paddingLeft="8dp"
     android:paddingTop="8dp"
@@ -11,15 +12,38 @@
     tools:context="com.junhyeoklee.som.ui.activity.MainActivity">
 
     <!-- A priority circle that is colored in programmatically in the adapter code -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:contentDescription="@string/content_description_water_icon"
+                android:tint="@color/sky"
+                app:srcCompat="@drawable/ic_circle_black_24dp" />
+
+            <View
+                android:id="@+id/v_step_connector_bottom"
+                android:layout_width="2dp"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:orientation="vertical">
 
             <!-- TextView that displays the description -->
@@ -28,7 +52,8 @@
                 style="@style/TextAppearance.AppCompat.Medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:fontFamily="@font/nanumbarunpenr"
+                android:textSize="18sp"
                 tools:text="100 ml" />
 
             <!-- TextView that displays the update date -->
@@ -38,7 +63,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:textSize="10sp"
+                android:fontFamily="@font/nanumbarunpenr"
+                android:textSize="12sp"
                 tools:text="11/11/1111" />
 
         </LinearLayout>

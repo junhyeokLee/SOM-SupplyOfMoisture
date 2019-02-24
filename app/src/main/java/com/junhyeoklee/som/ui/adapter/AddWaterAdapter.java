@@ -42,7 +42,7 @@ public class AddWaterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         int waterAmount = waterEntry.getAmount();
         String updateAt = dateFormat.format(waterEntry.getUpdateAt());
 
-        waterViewHolder.waterAmountView.setText(waterAmount);
+        waterViewHolder.waterAmountView.setText(String.valueOf(waterAmount));
         waterViewHolder.updatedAtView.setText(updateAt);
     }
 

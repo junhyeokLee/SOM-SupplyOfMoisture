@@ -5,9 +5,17 @@
     <color name="colorAccent">#FF4081</color>
     <color name="red">#f16d7a</color>
     <color name="green">#b7d28d</color>
-    <color name="blue">#98001f39</color>
     <color name="holo_purple">#ffaa66cc</color>
     <color name="sky">#0099ff</color>
+    <color name="sky2">#3385ff</color>
+
     <color name="mint">#00ffff</color>
     <color name="lightsky">#b3ecff</color>
+    <color name="navilight">#6927ff</color>
+    <color name="navilight2">#837dff</color>
+    <color name="navi">#233142</color>
+    <color name="navi2">#1a3263</color>
+    <color name="blue">#113f67</color>
+    <color name="blue2">#34699a</color>
+    <color name="blue3">#408ab4</color>
 </resources>

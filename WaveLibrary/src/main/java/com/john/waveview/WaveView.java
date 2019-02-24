@@ -33,7 +33,10 @@ public class WaveView extends LinearLayout {
     private Solid mSolid;
 
     private final int DEFAULT_ABOVE_WAVE_COLOR = Color.rgb(102,102,102);
+    private final int DEFAULT_ABOVE_WAVE_COLOR2 = getResources().getColor(R.color.sky);
     private final int DEFAULT_BLOW_WAVE_COLOR = Color.rgb(102,102,102);
+    private final int DEFAULT_BLOW_WAVE_COLOR2 = getResources().getColor(R.color.sky);
+
     private final int DEFAULT_PROGRESS = 50;
 
     public WaveView(Context context, AttributeSet attrs) {
@@ -41,8 +44,8 @@ public class WaveView extends LinearLayout {
         setOrientation(VERTICAL);
         //load styled attributes.
         final TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs, R.styleable.WaveView, R.attr.waveViewStyle, 0);
-        mAboveWaveColor = attributes.getColor(R.styleable.WaveView_above_wave_color, DEFAULT_ABOVE_WAVE_COLOR);
-        mBlowWaveColor = attributes.getColor(R.styleable.WaveView_blow_wave_color, DEFAULT_BLOW_WAVE_COLOR);
+        mAboveWaveColor = attributes.getColor(R.styleable.WaveView_above_wave_color, DEFAULT_ABOVE_WAVE_COLOR2);
+        mBlowWaveColor = attributes.getColor(R.styleable.WaveView_blow_wave_color, DEFAULT_BLOW_WAVE_COLOR2);
         mProgress = attributes.getInt(R.styleable.WaveView_progress, DEFAULT_PROGRESS);
         mWaveHeight = attributes.getInt(R.styleable.WaveView_wave_height, MIDDLE);
         mWaveMultiple = attributes.getInt(R.styleable.WaveView_wave_length, LARGE);
