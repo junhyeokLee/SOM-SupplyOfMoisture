@@ -54,7 +54,7 @@ public class MainFragment extends Fragment {
 
     private WaterDatabase mDb;
     private WaterEntry waterEntry;
-    private static final String DATE_FORMAT = "yyy/MM/dd";
+    public static final String DATE_FORMAT = "yyy/MM/dd";
     private static final String TAG = MainFragment.class.getSimpleName();
     private SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
 
@@ -127,9 +127,12 @@ public class MainFragment extends Fragment {
         final int DrinkAmount = Integer.parseInt(tv_Drink.getText().toString());
         final int DrinkSumAmount = DrinkAmount + Integer.parseInt(tv_DrinkAmount.getText().toString());
         final int TotalAmount = Integer.parseInt(tv_TotalAmout.getText().toString());
-        Date date = new Date();
+         long now = System.currentTimeMillis();
+         Date date = new Date(now);
+        SimpleDateFormat sdf = new SimpleDateFormat(MainFragment.DATE_FORMAT);
+        String getTime = sdf.format(date);
 
-        final WaterEntry water = new WaterEntry(DrinkAmount,date);
+        final WaterEntry water = new WaterEntry(DrinkAmount,getTime);
 
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override

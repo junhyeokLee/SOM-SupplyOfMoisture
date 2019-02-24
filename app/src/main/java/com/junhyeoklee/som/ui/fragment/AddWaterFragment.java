@@ -21,6 +21,8 @@ import com.junhyeoklee.som.data.model.WaterEntry;
 import com.junhyeoklee.som.ui.adapter.AddWaterAdapter;
 import com.junhyeoklee.som.ui.view_model.AddWaterViewModel;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -89,7 +91,22 @@ public class AddWaterFragment extends Fragment {
             @Override
             public void onChanged(@Nullable List<WaterEntry> waterEntries) {
                 Log.d(TAG, "Updating list of waters from LiveData in ViewModel");
-                mAdapter.setmWaterEntries(waterEntries);
+                 long now = System.currentTimeMillis();
+                 Date date = new Date(now);
+                SimpleDateFormat sdf = new SimpleDateFormat(MainFragment.DATE_FORMAT);
+                String getTime = sdf.format(date);
+
+                for(int i = 0 ; i < waterEntries.size() ; i++ ){
+                    if(waterEntries.get(i).getUpdateAt().toString().equals(getTime.toString())){
+                        mAdapter.setmWaterEntries(waterEntries);
+                        Log.d(TAG, "이건 리스트가 생선됬지만 데이트가 안맞는듯?");
+                    }
+                    else{
+//                        mAdapter.setmWaterEntries(waterEntries);
+                        Log.d(TAG, "데이트가 같지 않은듯"+""+waterEntries.get(i).getUpdateAt().toString()+""+getTime.toString());
+                        return;
+                    }
+                }
             }
         });
     }

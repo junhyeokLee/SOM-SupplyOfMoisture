@@ -10,6 +10,7 @@ import android.arch.persistence.room.Update;
 
 import com.junhyeoklee.som.data.model.WaterEntry;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao

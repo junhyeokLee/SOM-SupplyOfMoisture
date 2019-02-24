@@ -23,6 +23,5 @@ public class AddWaterViewModel extends AndroidViewModel {
         WaterDatabase database = WaterDatabase.getInstance(this.getApplication());
         water = database.waterDao().loadAllWaters();
     }
-
     public LiveData<List<WaterEntry>> getWater() {return water;}
 }

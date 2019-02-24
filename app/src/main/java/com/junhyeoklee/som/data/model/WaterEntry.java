@@ -19,15 +19,15 @@ public class WaterEntry {
     private int id;
     private int amount;
     @ColumnInfo(name = "updated_at")
-    private Date updateAt;
+    private String updateAt;
 
     @Ignore
-    public WaterEntry(int amount,Date updateAt){
+    public WaterEntry(int amount,String updateAt){
         this.amount = amount;
         this.updateAt = updateAt;
     }
 
-    public WaterEntry(int id,int amount,Date updateAt){
+    public WaterEntry(int id,int amount,String updateAt){
         this.id = id;
         this.amount = amount;
         this.updateAt = updateAt;
@@ -44,11 +44,11 @@ public class WaterEntry {
 
 
 
-    public Date getUpdateAt() {
+    public String getUpdateAt() {
         return updateAt;
     }
 
-    public void setUpdateAt(Date updateAt) {
+    public void setUpdateAt(String updateAt) {
         this.updateAt = updateAt;
     }
 
