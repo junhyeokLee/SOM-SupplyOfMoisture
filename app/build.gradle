@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
+
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.junhyeoklee.som"
@@ -16,6 +17,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
     }
 }
 
@@ -44,6 +49,20 @@ dependencies {
     testImplementation "android.arch.core:core-testing:$aac_v"
     testImplementation "android.arch.persistence.room:testing:$room_v"
 
+    // Rx Romm
+    implementation "android.arch.persistence.room:rxjava2:$room_v"
+
+    // Rx
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.3'
+
+    // Dagger
+    implementation "com.google.dagger:dagger:2.14.1"
+    annotationProcessor "com.google.dagger:dagger-compiler:2.14.1"
+    annotationProcessor "com.google.dagger:dagger-android-processor:2.14.1"
+    implementation "com.google.dagger:dagger-android-support:2.14.1"
+
+
     // ANDROID ARCHITECTURE COMPONENTS
     implementation "android.arch.lifecycle:extensions:$aac_v" // ViewModel & LiveData
     implementation "android.arch.lifecycle:runtime:$aac_v" // Compat with support library
@@ -64,8 +83,6 @@ dependencies {
     // Android Testing Support Library's runner and rules
     androidTestCompile "com.android.support.test:runner:$rootProject.ext.runnerVersion"
     androidTestCompile "com.android.support.test:rules:$rootProject.ext.rulesVersion"
-
-    androidTestCompile "android.arch.persistence.room:testing:$rootProject.room_v"
 
     // Dependencies for Android unit tests
     androidTestCompile "junit:junit:$rootProject.ext.junitVersion"

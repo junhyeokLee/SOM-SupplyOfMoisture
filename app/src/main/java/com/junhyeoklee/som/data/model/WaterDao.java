@@ -13,11 +13,19 @@ import com.junhyeoklee.som.data.model.WaterEntry;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Flowable;
+
 @Dao
 public interface WaterDao {
 
     @Query("SELECT * FROM waters")
     LiveData<List<WaterEntry>> loadAllWaters();
+
+    @Query("SELECT * FROM waters WHERE date = :date")
+    LiveData<List<WaterEntry>> loadWaterBydate(String date);
+
+    @Query("SELECT * FROM waters WHERE date = :date")
+    List<WaterEntry> loadWaterBydate2(String date);
 
     @Query("SELECT * FROM waters")
     LiveData<WaterEntry> loadWaters();

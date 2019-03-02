@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import com.junhyeoklee.som.R;
 import com.junhyeoklee.som.data.model.WaterEntry;
 import com.junhyeoklee.som.ui.holder.AddWaterViewHolder;
-import com.junhyeoklee.som.ui.view_model.AddWaterViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -40,7 +39,7 @@ public class AddWaterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         AddWaterViewHolder waterViewHolder = (AddWaterViewHolder) holder;
         WaterEntry waterEntry = mWaterEntries.get(position);
         int waterAmount = waterEntry.getAmount();
-        String updateAt = (waterEntry.getUpdateAt().toString());
+        String updateAt = (waterEntry.getDate().toString());
 
         waterViewHolder.waterAmountView.setText(String.valueOf(waterAmount));
         waterViewHolder.updatedAtView.setText(updateAt);

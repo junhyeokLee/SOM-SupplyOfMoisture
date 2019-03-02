@@ -24,8 +24,11 @@ import com.junhyeoklee.som.data.model.WaterEntry;
 import com.junhyeoklee.som.ui.view_model.MainViewModel;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,8 +52,11 @@ public class MainFragment extends Fragment {
     WaveView waveView;
 
     private int addAnimationWaveValue = 0;
-//    private static int mTotalWaveValue = 0;
+    //    private static int mTotalWaveValue = 0;
     private final Handler handler = new Handler();
+
+    private Date calendarDate = new Date();
+    private SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 
     private WaterDatabase mDb;
     private WaterEntry waterEntry;
@@ -61,8 +67,8 @@ public class MainFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main,container,false);
-        ButterKnife.bind(this,view);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        ButterKnife.bind(this, view);
         mDb = WaterDatabase.getInstance(container.getContext());
         inintLayout();
         setUpView();
@@ -84,7 +90,7 @@ public class MainFragment extends Fragment {
         super.onDestroy();
     }
 
-    private void inintLayout(){
+    private void inintLayout() {
         sb_DrinkBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -115,7 +121,7 @@ public class MainFragment extends Fragment {
 
     }
 
-    public void printSelect(int value){
+    public void printSelect(int value) {
 //        waterEntry.setWater_progress_ml(value);
         tv_Drink.setText(String.valueOf(value));
 //          mWater.setWater_progress_ml(value);
@@ -123,51 +129,53 @@ public class MainFragment extends Fragment {
 
     }
 
-    private void onDrinkButtonClicked(){
+    private void onDrinkButtonClicked() {
         final int DrinkAmount = Integer.parseInt(tv_Drink.getText().toString());
         final int DrinkSumAmount = DrinkAmount + Integer.parseInt(tv_DrinkAmount.getText().toString());
         final int TotalAmount = Integer.parseInt(tv_TotalAmout.getText().toString());
-         long now = System.currentTimeMillis();
-         Date date = new Date(now);
-        SimpleDateFormat sdf = new SimpleDateFormat(MainFragment.DATE_FORMAT);
-        String getTime = sdf.format(date);
+// 년 월 일 만 나타나게 하기 위해 Date 조정 하여 Insert
 
-        final WaterEntry water = new WaterEntry(DrinkAmount,getTime);
-
+//            Calendar cal = new GregorianCalendar();
+//            cal.add(Calendar.DATE,-1);
+//            Date date = cal.getTime();
+//            date = sdf2.parse(sdf2.format(date));
+        String getTime = sdf2.format(calendarDate);
+        final WaterEntry water = new WaterEntry(DrinkAmount, getTime);
+        Log.e(TAG, "Date Insert = " + " " + getTime);
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
                 mDb.waterDao().insertWater(water);
             }
         });
+
 //        mTotalWaveValue = DrinkSumAmount;
         tv_DrinkAmount.setText(String.valueOf(DrinkSumAmount));
-        final double PercentValue = (double)((double)DrinkSumAmount / TotalAmount) * 100;
+        final double PercentValue = (double) ((double) DrinkSumAmount / TotalAmount) * 100;
         String dispPattern = "0";
         final DecimalFormat form = new DecimalFormat(dispPattern);
 
         new Thread(new Runnable() {
-           @Override
-           public void run() {
-               while (addAnimationWaveValue < DrinkSumAmount){
-                   addAnimationWaveValue += 10;
-                   SystemClock.sleep(20L);
-                   handler.post(new Runnable() {
-                       @Override
-                       public void run() {
-                           // 100% 넘었을때 100 프로 유지
-                if(Integer.parseInt(form.format(PercentValue).toString()) >= 100){
-                    tv_Percentage.setText("100");
+            @Override
+            public void run() {
+                while (addAnimationWaveValue < DrinkSumAmount) {
+                    addAnimationWaveValue += 10;
+                    SystemClock.sleep(20L);
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 100% 넘었을때 100 프로 유지
+                            if (Integer.parseInt(form.format(PercentValue).toString()) >= 100) {
+                                tv_Percentage.setText("100");
+                            } else {
+                                tv_Percentage.setText(String.valueOf(form.format(PercentValue)));
+                            }
+                            waveView.setProgress(addAnimationWaveValue, TotalAmount);
+                        }
+                    });
                 }
-                else {
-                    tv_Percentage.setText(String.valueOf(form.format(PercentValue)));
-                }
-                waveView.setProgress(addAnimationWaveValue,TotalAmount);
-                       }
-                   });
-               }
-           }
-       }).start();
+            }
+        }).start();
     }
 
     private void setUpView() {
@@ -187,19 +195,23 @@ public class MainFragment extends Fragment {
         }
     }
 
-    private void populateUI(final List<WaterEntry> waters){
+    private void populateUI(final List<WaterEntry> waters) {
         int TotalDrinkValue = 0;
+        Date TotalDateValue = new Date();
         String dispPattern = "0";
         final DecimalFormat form = new DecimalFormat(dispPattern);
 
-        if(waters == null){
+        if (waters == null) {
             return;
         }
-        for(int i=0;i < waters.size(); i++) {
-            TotalDrinkValue += waters.get(i).getAmount();
+
+        for (int i = 0; i < waters.size(); i++) {
+            if (waters.get(i).getAmount() != 0 && waters.get(i).getDate() != null) {
+                TotalDrinkValue += waters.get(i).getAmount();
+            }
         }
-        final double PercentValue = (double)((double)TotalDrinkValue / 1500) * 100;
-        Log.e(TAG,"DrinkAmountValue ="+""+TotalDrinkValue);
+        final double PercentValue = (double) ((double) TotalDrinkValue / 1500) * 100;
+        Log.e(TAG, "DrinkAmountValue =" + "" + TotalDrinkValue);
 
         tv_DrinkAmount.setText(String.valueOf(TotalDrinkValue));
         tv_TotalAmout.setText(String.valueOf(1500));
@@ -213,20 +225,19 @@ public class MainFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (addAnimationWaveValue < DrinkSumAmount){
+                while (addAnimationWaveValue < DrinkSumAmount) {
                     addAnimationWaveValue += 10;
                     SystemClock.sleep(20L);
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
                             // 100% 넘었을때 100 프로 유지
-                            if(Integer.parseInt(form.format(PercentValue).toString()) >= 100){
+                            if (Integer.parseInt(form.format(PercentValue).toString()) >= 100) {
                                 tv_Percentage.setText("100");
-                            }
-                            else {
+                            } else {
                                 tv_Percentage.setText(String.valueOf(form.format(PercentValue)));
                             }
-                            waveView.setProgress(addAnimationWaveValue,TotalAmount);
+                            waveView.setProgress(addAnimationWaveValue, TotalAmount);
                         }
                     });
                 }

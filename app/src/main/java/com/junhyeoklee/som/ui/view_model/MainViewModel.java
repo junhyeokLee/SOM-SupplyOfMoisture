@@ -17,7 +17,7 @@ public class MainViewModel extends ViewModel{
 
     public MainViewModel(WaterDatabase database) {
         if (database != null) {
-            waters = database.waterDao().loadAllWaters();
+            this.waters = database.waterDao().loadAllWaters();
         }
     }
         public LiveData<List<WaterEntry>> getWaters(){return waters;}
