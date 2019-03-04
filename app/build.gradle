@@ -5,7 +5,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.junhyeoklee.som"
-        minSdkVersion 19
+        minSdkVersion 24
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -61,6 +61,10 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:2.14.1"
     annotationProcessor "com.google.dagger:dagger-android-processor:2.14.1"
     implementation "com.google.dagger:dagger-android-support:2.14.1"
+
+
+    // Sliding Panell Library
+    compile 'com.sothree.slidinguppanel:library:3.3.0'
 
 
     // ANDROID ARCHITECTURE COMPONENTS

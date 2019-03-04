@@ -3,41 +3,51 @@
     This layout defines the main activity screen and displays a listtaskEntriesasks (if they exist),
     and a floating action button that launches another activity.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_alignParentBottom="true"
+    android:gravity="bottom"
+    xmlns:sothree="http://schemas.android.com/tools">
 
     <!-- RecyclerView that is responsible for holding a listtaskEntrytask data -->
 
-    <ScrollView
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+
+        android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1.5">
+        android:clickable="false"
+        android:focusable="false"
+        android:gravity="bottom"
+        sothree:dragView="@+id/shadowLayoutAbove"
+        sothree:panelHeight="@dimen/drawOptionPanelSize">
 
-        <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                    android:id="@+id/calendarView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    app:mcv_selectionColor="#a9dbf0cb"
+                    app:mcv_showOtherDates="defaults" />
+            </LinearLayout>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewWaters"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:clipToPadding="false" />
 
-            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-                android:id="@+id/calendarView"
-                android:layout_width="250dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                app:mcv_selectionColor="#a9dbf0cb"
-                app:mcv_showOtherDates="defaults" />
-        </LinearLayout>
-    </ScrollView>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerViewWaters"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:clipToPadding="false" />
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
 
-</LinearLayout>
+
+</RelativeLayout>
 

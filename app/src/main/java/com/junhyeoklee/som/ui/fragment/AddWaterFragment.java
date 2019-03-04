@@ -2,6 +2,8 @@ package com.junhyeoklee.som.ui.fragment;
 
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.junhyeoklee.som.AppExecutors;
+import com.junhyeoklee.som.data.factory.MainViewModelFactory;
+import com.junhyeoklee.som.ui.view_model.MainViewModel;
 import com.junhyeoklee.som.util.DateUtil;
 import com.junhyeoklee.som.util.InjectorUtils;
 import com.junhyeoklee.som.R;
@@ -29,10 +33,15 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.format.DateFormatDayFormatter;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -40,6 +49,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
+import static java.util.concurrent.Executors.newSingleThreadExecutor;
 
 public class AddWaterFragment extends Fragment {
     public static final String TAG = AddWaterFragment.class.getSimpleName();
@@ -54,11 +64,16 @@ public class AddWaterFragment extends Fragment {
     @BindView(R.id.recyclerViewWaters)
     RecyclerView mRecyclerView;
     TextView mImgView;
+
     @BindView(R.id.calendarView)
     MaterialCalendarView mMaterialCalendarView;
 
+    @BindView(R.id.sliding_layout)
+    SlidingUpPanelLayout slidingUpPanelLayout;
+
 
     private AddWaterDateViewModel viewModel;
+    private MainViewModel mainViewModel;
 
     private List<WaterEntry> mWaterList;
 
@@ -67,12 +82,27 @@ public class AddWaterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_drink, container, false);
         ButterKnife.bind(this, view);
-
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mAdapter = new AddWaterAdapter(view.getContext());
         mRecyclerView.setAdapter(mAdapter);
         DividerItemDecoration decoration = new DividerItemDecoration(this.getContext(), VERTICAL);
         mRecyclerView.addItemDecoration(decoration);
+        SlidingUpPanelLayout slidingUpPanelLayout = (SlidingUpPanelLayout) view.findViewById(R.id.sliding_layout);
+        slidingUpPanelLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+
+            }
+
+            @Override
+            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+                if(newState.name().toString().equalsIgnoreCase("Collapsed")){
+                    //action when collapsed
+                }else if(newState.name().equalsIgnoreCase("Expanded")){
+                    //action when expanded
+                }
+            }
+        });
 
         mDb = WaterDatabase.getInstance(this.getContext());
 
@@ -81,6 +111,8 @@ public class AddWaterFragment extends Fragment {
         String getTime = sdf.format(calendarDate);
         Log.e(TAG, "DATE VALUE = " + " " + getTime);
 
+
+        // 오늘 날짜의 리스트 보여주기
         AddWaterViewModelFactory factory = InjectorUtils.provideWaterViewModelFactory(getContext());
         viewModel = ViewModelProviders.of(this, factory).get(AddWaterDateViewModel.class);
         viewModel.getWater_date(getTime).observe(this, waterEntries -> {
@@ -88,6 +120,23 @@ public class AddWaterFragment extends Fragment {
             mAdapter.setmWaterEntries(mWaterList);
         });
 
+        // 물을 마셨던 모든 날짜들 Decoration 이벤트 주기
+        MainViewModelFactory mainFactory = new MainViewModelFactory(mDb);
+         mainViewModel = ViewModelProviders.of(this, mainFactory).get(MainViewModel.class);
+         mainViewModel.getWaters().observe(this,waterEntries -> {
+            String[] result;
+            for(int i = 0 ; i < waterEntries.size() ; i++){
+                result = new String[]{waterEntries.get(i).getDate(),waterEntries.get(0).getDate()};
+                if(result != null){
+                    new ApiSimulator(result).executeOnExecutor(newSingleThreadExecutor());
+                }
+                String[] result2 = {"2019-03-01","2019-03-02","2019-03-03"};
+                Log.e(TAG,"WATER DATE LIST STATIC = "+" "+result2.toString());
+                Log.e(TAG,"WATER DATE LIST = "+" "+result.toString());
+            }
+        });
+
+        // Calendar뷰 의 해당날짜의 마신양의 리스트 출력
         mMaterialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
@@ -99,7 +148,7 @@ public class AddWaterFragment extends Fragment {
             }
         });
 
-
+        // 리스트 아이템 선택 스와이프시 삭제
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -122,4 +171,45 @@ public class AddWaterFragment extends Fragment {
         }).attachToRecyclerView(mRecyclerView);
         return view;
     }
+
+    // Calendar뷰의 날짜 Decoration Event Class
+    private class ApiSimulator extends AsyncTask<Void, Void, List<CalendarDay>> {
+        String[] Time_Result;
+
+        ApiSimulator(String[] Time_Result){
+            this.Time_Result = Time_Result;
+        }
+
+        @Override
+        protected List<CalendarDay> doInBackground(Void... params) {
+            try{
+                Thread.sleep(500);
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
+            Calendar calendar = Calendar.getInstance();
+            ArrayList<CalendarDay> dates = new ArrayList<>();
+            /*특정날짜 달력에 점표시해주는곳*/
+            /*월은 0이 1월 년,일은 그대로*/
+            //string 문자열인 Time_Result 을 받아와서 ,를 기준으로짜르고 string을 int 로 변환
+            for(int i = 0 ; i < Time_Result.length ; i ++){
+                CalendarDay day = CalendarDay.from(calendar);
+                String[] time = Time_Result[i].split("-");
+                int year = Integer.parseInt(time[0]);
+                int month = Integer.parseInt(time[1]);
+                int dayy = Integer.parseInt(time[2]);
+
+                dates.add(day);
+                calendar.set(year,month-1,dayy);
+            }
+            return dates;
+        }
+
+        @Override
+        protected void onPostExecute(List<CalendarDay> calendarDays) {
+            super.onPostExecute(calendarDays);
+            mMaterialCalendarView.addDecorator(new DateUtil.EventDecorator(Color.BLUE,calendarDays,AddWaterFragment.this));
+        }
+    }
+
 }
