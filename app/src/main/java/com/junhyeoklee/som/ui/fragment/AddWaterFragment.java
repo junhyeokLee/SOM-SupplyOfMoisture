@@ -58,12 +58,10 @@ public class AddWaterFragment extends Fragment {
     private Date calendarDate = new Date();
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     private DateFormatDayFormatter dateFormatDayFormatter = new DateFormatDayFormatter(sdf);
-    private CalendarDay calendarDay = new CalendarDay();
     private String getDateFormatDay;
 
     @BindView(R.id.recyclerViewWaters)
     RecyclerView mRecyclerView;
-    TextView mImgView;
 
     @BindView(R.id.calendarView)
     MaterialCalendarView mMaterialCalendarView;
@@ -74,7 +72,6 @@ public class AddWaterFragment extends Fragment {
 
     private AddWaterDateViewModel viewModel;
     private MainViewModel mainViewModel;
-
     private List<WaterEntry> mWaterList;
 
     @Nullable
@@ -126,9 +123,10 @@ public class AddWaterFragment extends Fragment {
          mainViewModel.getWaters().observe(this,waterEntries -> {
             String[] result;
             for(int i = 0 ; i < waterEntries.size() ; i++){
-                result = new String[]{waterEntries.get(i).getDate(),waterEntries.get(0).getDate()};
+                result = new String[]{waterEntries.get(i).getDate(),waterEntries.get(i).getDate()};
                 if(result != null){
                     new ApiSimulator(result).executeOnExecutor(newSingleThreadExecutor());
+
                 }
                 String[] result2 = {"2019-03-01","2019-03-02","2019-03-03"};
                 Log.e(TAG,"WATER DATE LIST STATIC = "+" "+result2.toString());
@@ -189,6 +187,7 @@ public class AddWaterFragment extends Fragment {
             }
             Calendar calendar = Calendar.getInstance();
             ArrayList<CalendarDay> dates = new ArrayList<>();
+            CalendarDay today = CalendarDay.today();
             /*특정날짜 달력에 점표시해주는곳*/
             /*월은 0이 1월 년,일은 그대로*/
             //string 문자열인 Time_Result 을 받아와서 ,를 기준으로짜르고 string을 int 로 변환
@@ -198,8 +197,8 @@ public class AddWaterFragment extends Fragment {
                 int year = Integer.parseInt(time[0]);
                 int month = Integer.parseInt(time[1]);
                 int dayy = Integer.parseInt(time[2]);
-
                 dates.add(day);
+                dates.remove(today);
                 calendar.set(year,month-1,dayy);
             }
             return dates;

@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.junhyeok_lee.waterfilling.waters.Main2Activity">
+    tools:context="com.junhyeok_lee.waterfilling.waters.MainActivity">
 
     <FrameLayout
         android:id="@+id/fragment_container"
@@ -20,7 +20,10 @@
         android:id="@+id/navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/blue2"
+        android:background="@android:color/background_light"
+        app:elevation="4dp"
+        app:itemIconTint="@drawable/nav_item_color_state"
+        app:itemTextColor="@drawable/nav_item_color_state"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

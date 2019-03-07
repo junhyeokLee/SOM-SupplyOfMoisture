@@ -68,6 +68,7 @@ public class DateUtil {
         @Override
         public void decorate(DayViewFacade view) {
             view.addSpan(new ForegroundColorSpan(Color.rgb(0,216,255)));
+            view.addSpan(new DotSpan(10,Color.rgb(0,216,255)));
         }
 
         public void setDate(Date date){
@@ -103,34 +104,9 @@ public class DateUtil {
 
         @Override
         public void decorate(DayViewFacade view) {
-            view.addSpan(new DotSpan(15,color));
+            view.addSpan(new DotSpan(10,color));
         }
 
-    }
-    public static class ApiSimulator extends AsyncTask<Void, Void, List<CalendarDay>> {
-
-        @Override
-        protected List<CalendarDay> doInBackground(Void... voids) {
-            try{
-                Thread.sleep(2000);
-            }catch (InterruptedException e){
-                e.printStackTrace();
-            }
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.MONTH, -2);
-            ArrayList<CalendarDay> dates = new ArrayList<>();
-            for(int i = 0; i < 30; i++){
-                CalendarDay day = CalendarDay.from(calendar);
-                dates.add(day);
-                calendar.add(Calendar.DATE,5);
-            }
-            return dates;
-        }
-
-        @Override
-        protected void onPostExecute(List<CalendarDay> calendarDays) {
-            super.onPostExecute(calendarDays);
-        }
     }
 
 }

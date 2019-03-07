@@ -25,8 +25,9 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/img_up"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
                 android:layout_gravity="center"
                 android:contentDescription="@string/content_description_water_icon"
                 android:tint="@color/sky"
@@ -39,6 +40,15 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:background="@color/colorPrimary" />
+
+            <ImageView
+                android:id="@+id/img_down"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/content_description_water_icon"
+                android:tint="@color/sky"
+                app:srcCompat="@drawable/ic_circle_black_24dp" />
         </LinearLayout>
 
         <LinearLayout
