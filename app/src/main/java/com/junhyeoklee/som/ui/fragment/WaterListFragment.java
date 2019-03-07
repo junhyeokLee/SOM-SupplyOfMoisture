@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.junhyeoklee.som.AppExecutors;
 import com.junhyeoklee.som.data.factory.MainViewModelFactory;
@@ -27,7 +26,7 @@ import com.junhyeoklee.som.R;
 import com.junhyeoklee.som.data.database.WaterDatabase;
 import com.junhyeoklee.som.data.factory.AddWaterViewModelFactory;
 import com.junhyeoklee.som.data.model.WaterEntry;
-import com.junhyeoklee.som.ui.adapter.AddWaterAdapter;
+import com.junhyeoklee.som.ui.adapter.WaterListAdapter;
 import com.junhyeoklee.som.ui.view_model.AddWaterDateViewModel;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -37,13 +36,9 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,10 +46,10 @@ import butterknife.ButterKnife;
 import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
 
-public class AddWaterFragment extends Fragment {
-    public static final String TAG = AddWaterFragment.class.getSimpleName();
+public class WaterListFragment extends Fragment {
+    public static final String TAG = WaterListFragment.class.getSimpleName();
     private WaterDatabase mDb;
-    private AddWaterAdapter mAdapter;
+    private WaterListAdapter mAdapter;
     private Date calendarDate = new Date();
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     private DateFormatDayFormatter dateFormatDayFormatter = new DateFormatDayFormatter(sdf);
@@ -80,7 +75,7 @@ public class AddWaterFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_drink, container, false);
         ButterKnife.bind(this, view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        mAdapter = new AddWaterAdapter(view.getContext());
+        mAdapter = new WaterListAdapter(view.getContext());
         mRecyclerView.setAdapter(mAdapter);
         DividerItemDecoration decoration = new DividerItemDecoration(this.getContext(), VERTICAL);
         mRecyclerView.addItemDecoration(decoration);
@@ -139,7 +134,7 @@ public class AddWaterFragment extends Fragment {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 getDateFormatDay = dateFormatDayFormatter.format(date);
-                viewModel.getWater_date(getDateFormatDay).observe(AddWaterFragment.this, waterEntries -> {
+                viewModel.getWater_date(getDateFormatDay).observe(WaterListFragment.this, waterEntries -> {
                     mWaterList = waterEntries;
                     mAdapter.setmWaterEntries(mWaterList);
                 });
@@ -207,7 +202,7 @@ public class AddWaterFragment extends Fragment {
         @Override
         protected void onPostExecute(List<CalendarDay> calendarDays) {
             super.onPostExecute(calendarDays);
-            mMaterialCalendarView.addDecorator(new DateUtil.EventDecorator(Color.BLUE,calendarDays,AddWaterFragment.this));
+            mMaterialCalendarView.addDecorator(new DateUtil.EventDecorator(Color.BLUE,calendarDays,WaterListFragment.this));
         }
     }
 

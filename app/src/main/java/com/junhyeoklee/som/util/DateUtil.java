@@ -4,7 +4,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.text.style.ForegroundColorSpan;
 
-import com.junhyeoklee.som.ui.fragment.AddWaterFragment;
+import com.junhyeoklee.som.ui.fragment.WaterListFragment;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
@@ -92,7 +92,7 @@ public class DateUtil {
         private int color;
         private HashSet<CalendarDay> dates;
 
-        public EventDecorator(int color, Collection<CalendarDay> dates, AddWaterFragment addWaterFragment){
+        public EventDecorator(int color, Collection<CalendarDay> dates, WaterListFragment WaterListFragment){
             this.color = color;
             this.dates = new HashSet<>(dates);
         }

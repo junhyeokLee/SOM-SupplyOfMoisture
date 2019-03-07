@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-public class AddWaterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class WaterListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private static final String TAG = "TaskAdapter";
     private static final String DATE_FORMAT = "yyy/MM/dd";
@@ -23,7 +23,7 @@ public class AddWaterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
 
 
-    public AddWaterAdapter(Context context){
+    public WaterListAdapter(Context context){
         mContext = context;
     }
 

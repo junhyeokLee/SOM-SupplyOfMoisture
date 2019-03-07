@@ -11,8 +11,9 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.junhyeoklee.som.R;
-import com.junhyeoklee.som.ui.fragment.AddWaterFragment;
 import com.junhyeoklee.som.ui.fragment.MainFragment;
+import com.junhyeoklee.som.ui.fragment.WaterGraphFragment;
+import com.junhyeoklee.som.ui.fragment.WaterListFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,9 +32,10 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_notifications:
                     break;
                 case R.id.navigation_dashboard:
-                    fragment = new AddWaterFragment();
+                    fragment = new WaterListFragment();
                     break;
                 case R.id.navigation_chart:
+                    fragment = new WaterGraphFragment();
                     break;
 
                 case R.id.navigation_person:
