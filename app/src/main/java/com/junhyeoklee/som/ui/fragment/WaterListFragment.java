@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.junhyeoklee.som.AppExecutors;
 import com.junhyeoklee.som.data.factory.MainViewModelFactory;
@@ -34,6 +35,7 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.format.DateFormatDayFormatter;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,6 +66,9 @@ public class WaterListFragment extends Fragment {
     @BindView(R.id.sliding_layout)
     SlidingUpPanelLayout slidingUpPanelLayout;
 
+    @BindView(R.id.tv_total)
+    TextView mTv_total;
+
 
     private AddWaterDateViewModel viewModel;
     private MainViewModel mainViewModel;
@@ -79,11 +84,11 @@ public class WaterListFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         DividerItemDecoration decoration = new DividerItemDecoration(this.getContext(), VERTICAL);
         mRecyclerView.addItemDecoration(decoration);
-        SlidingUpPanelLayout slidingUpPanelLayout = (SlidingUpPanelLayout) view.findViewById(R.id.sliding_layout);
+
+        slidingUpPanelLayout.setPanelHeight(720);
         slidingUpPanelLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
-
             }
 
             @Override
@@ -109,6 +114,7 @@ public class WaterListFragment extends Fragment {
         viewModel = ViewModelProviders.of(this, factory).get(AddWaterDateViewModel.class);
         viewModel.getWater_date(getTime).observe(this, waterEntries -> {
             mWaterList = waterEntries;
+            TotalValutUI(waterEntries);
             mAdapter.setmWaterEntries(mWaterList);
         });
 
@@ -135,6 +141,7 @@ public class WaterListFragment extends Fragment {
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 getDateFormatDay = dateFormatDayFormatter.format(date);
                 viewModel.getWater_date(getDateFormatDay).observe(WaterListFragment.this, waterEntries -> {
+                    TotalValutUI(waterEntries);
                     mWaterList = waterEntries;
                     mAdapter.setmWaterEntries(mWaterList);
                 });
@@ -163,6 +170,19 @@ public class WaterListFragment extends Fragment {
             }
         }).attachToRecyclerView(mRecyclerView);
         return view;
+    }
+
+    private void TotalValutUI(final List<WaterEntry> waters) {
+        int TotalDrinkValue = 0;
+        String dispPattern = "0";
+        final DecimalFormat form = new DecimalFormat(dispPattern);
+
+        for (int i = 0; i < waters.size(); i++) {
+            if(waters != null){
+                TotalDrinkValue += waters.get(i).getAmount();
+            }
+        }
+        mTv_total.setText(String.valueOf(TotalDrinkValue));
     }
 
     // Calendar뷰의 날짜 Decoration Event Class

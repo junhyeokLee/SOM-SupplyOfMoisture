@@ -7,6 +7,7 @@ import com.junhyeoklee.som.WaterNetworkRoot;
 import com.junhyeoklee.som.data.database.WaterDatabase;
 import com.junhyeoklee.som.data.factory.AddWaterViewModelFactory;
 import com.junhyeoklee.som.WaterRepository;
+import com.junhyeoklee.som.data.factory.WaterGraphViewModelFactory;
 
 public class InjectorUtils {
 
@@ -28,5 +29,9 @@ public class InjectorUtils {
     public static AddWaterViewModelFactory provideWaterViewModelFactory(Context context) {
         WaterRepository repository = provideRepository(context.getApplicationContext());
         return new AddWaterViewModelFactory(repository);
+    }
+    public static WaterGraphViewModelFactory provideWaterGraphViewModelFactory(Context context) {
+        WaterRepository repository = provideRepository(context.getApplicationContext());
+        return new WaterGraphViewModelFactory(repository);
     }
 }

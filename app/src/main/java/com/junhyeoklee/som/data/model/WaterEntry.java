@@ -23,17 +23,21 @@ public class WaterEntry {
     private int amount;
     @ColumnInfo(name = "date")
     private String date;
+    //그래프 달마다 체크하기 위함
+    private String dateMonth;
 
     @Ignore
-    public WaterEntry(int amount,String date){
+    public WaterEntry(int amount,String date,String dateMonth){
         this.amount = amount;
         this.date = date;
+        this.dateMonth = dateMonth;
     }
 
-    public WaterEntry(int id,int amount,String date){
+    public WaterEntry(int id,int amount,String date,String dateMonth){
         this.id = id;
         this.amount = amount;
         this.date = date;
+        this.dateMonth = dateMonth;
     }
 
 
@@ -55,5 +59,11 @@ public class WaterEntry {
         this.date = date;
     }
 
+    public String getDateMonth() {
+        return dateMonth;
+    }
 
+    public void setDateMonth(String dateMonth) {
+        this.dateMonth = dateMonth;
+    }
 }

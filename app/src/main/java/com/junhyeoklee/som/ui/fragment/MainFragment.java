@@ -59,7 +59,9 @@ public class MainFragment extends Fragment {
 
     private Date calendarDate = new Date();
     private SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat sdfMonth = new SimpleDateFormat("yyyy-MM");
     private String getTime = sdf2.format(calendarDate);
+    private String getTiemMonth = sdfMonth.format(calendarDate);
 
     private WaterDatabase mDb;
     public static final String DATE_FORMAT = "yyy/MM/dd";
@@ -178,8 +180,9 @@ public class MainFragment extends Fragment {
         final int DrinkSumAmount = DrinkAmount + Integer.parseInt(tv_DrinkAmount.getText().toString());
         final int TotalAmount = Integer.parseInt(tv_TotalAmout.getText().toString());
 
-        final WaterEntry water = new WaterEntry(DrinkAmount, getTime);
+        final WaterEntry water = new WaterEntry(DrinkAmount, getTime,getTiemMonth);
         Log.e(TAG, "Date Insert = " + " " + getTime);
+        Log.e(TAG,"Date Month Insert = " + " "+ getTiemMonth);
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {

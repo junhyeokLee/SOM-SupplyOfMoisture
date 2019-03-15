@@ -18,29 +18,13 @@ public class WaterRepository {
     private final WaterNetworkRoot mWaterNetworkRoot;
     private final AppExecutors mExcutors;
     private boolean mInitialized = false;
-    private final MutableLiveData<List<WaterEntry>> mLoadWaterList;
-    private final MutableLiveData<String> mWaterGetDate;
+
 
     private WaterRepository(WaterDao waterDao,WaterNetworkRoot waterNetworkRoot,
                             AppExecutors executors){
         mWaterDao = waterDao;
         mWaterNetworkRoot = waterNetworkRoot;
         mExcutors = executors;
-        mLoadWaterList = new MutableLiveData<>();
-        mWaterGetDate = new MutableLiveData<>();
-
-        LiveData<List<WaterEntry>> getLoadWaters = mWaterNetworkRoot.getLoadWaterList();
-        getLoadWaters.observeForever(newWatersFromNetwork -> mExcutors.diskIO().execute(() ->{
-            String getDate = null;
-            if(newWatersFromNetwork != null){
-//                mWaterGetDate.postValue(getDate);
-                mWaterDao.loadWaterBydate(getDate);
-            }
-            else{
-                Log.e("No Response","No Response from network");
-            }
-        }));
-
     }
 
 
@@ -67,9 +51,22 @@ public class WaterRepository {
         }));
 
         initializedDate();
-        MutableLiveData<String> mLivedate = new MutableLiveData<>();
-        mLivedate.setValue(date);
         return mWaterDao.loadWaterBydate(date);
+    }
+    public LiveData<List<WaterEntry>> getWaterDateMonth(String dateMonth){
+
+        LiveData<List<WaterEntry>> getLoadWaters = mWaterNetworkRoot.getLoadWaterList();
+        getLoadWaters.observeForever(newWatersFromNetwork -> mExcutors.diskIO().execute(() ->{
+            if(newWatersFromNetwork != null){
+                mWaterDao.loadWaterBydateMonth(dateMonth);
+            }
+            else{
+                Log.e("No Response","No Response from network");
+            }
+        }));
+
+        initializedDate();
+        return mWaterDao.loadWaterBydateMonth(dateMonth);
     }
 
     private synchronized void initializedDate(){

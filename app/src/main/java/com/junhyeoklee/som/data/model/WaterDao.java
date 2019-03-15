@@ -24,6 +24,9 @@ public interface WaterDao {
     @Query("SELECT * FROM waters WHERE date = :date")
     LiveData<List<WaterEntry>> loadWaterBydate(String date);
 
+    @Query("SELECT * FROM waters WHERE dateMonth = :dateMonth")
+    LiveData<List<WaterEntry>> loadWaterBydateMonth(String dateMonth);
+
     @Query("SELECT * FROM waters")
     LiveData<WaterEntry> loadWaters();
 

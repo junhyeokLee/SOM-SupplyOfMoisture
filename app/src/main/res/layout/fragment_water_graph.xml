@@ -4,18 +4,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/chart"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_date_month"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nanumbarunpenr"
+            android:gravity="center"
+            android:text="2019"
+            android:textColor="@color/blue"
+            android:textSize="30sp" />
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/chart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="2.5"
         android:gravity="center|top"
         android:text="List자리" />
 
