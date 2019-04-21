@@ -1,8 +1,8 @@
 package com.junhyeoklee.som.data.factory;
 
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.annotation.NonNull;
 
 import com.junhyeoklee.som.data.database.WaterDatabase;
 import com.junhyeoklee.som.ui.view_model.MainViewModel;

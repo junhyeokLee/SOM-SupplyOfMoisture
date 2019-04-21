@@ -1,12 +1,12 @@
 package com.junhyeoklee.som.ui.fragment;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,18 +20,13 @@ import com.junhyeoklee.som.AppExecutors;
 import com.junhyeoklee.som.R;
 import com.junhyeoklee.som.data.database.WaterDatabase;
 import com.junhyeoklee.som.data.factory.AddWaterViewModelFactory;
-import com.junhyeoklee.som.data.factory.MainViewModelFactory;
 import com.junhyeoklee.som.data.model.WaterEntry;
 import com.junhyeoklee.som.ui.view_model.AddWaterDateViewModel;
-import com.junhyeoklee.som.ui.view_model.MainViewModel;
 import com.junhyeoklee.som.util.InjectorUtils;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -134,7 +129,7 @@ public class MainFragment extends Fragment {
 
         for (int i = 0; i < waters.size(); i++) {
             if(waters != null){
-            TotalDrinkValue += waters.get(i).getAmount();
+                TotalDrinkValue += waters.get(i).getAmount();
             }
         }
         final double PercentValue = (double) ((double) TotalDrinkValue / 1500) * 100;

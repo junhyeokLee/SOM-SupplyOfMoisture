@@ -1,52 +1,37 @@
 package com.junhyeoklee.som.ui.fragment;
 
-import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.Color;
-import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
+import androidx.annotation.Nullable;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.junhyeoklee.som.R;
 import com.junhyeoklee.som.data.database.WaterDatabase;
-import com.junhyeoklee.som.data.factory.AddWaterViewModelFactory;
 import com.junhyeoklee.som.data.factory.MainViewModelFactory;
 import com.junhyeoklee.som.data.factory.WaterGraphViewModelFactory;
 import com.junhyeoklee.som.data.model.WaterEntry;
-import com.junhyeoklee.som.ui.MyMarkerView;
 import com.junhyeoklee.som.ui.view_model.AddWaterDateViewModel;
 import com.junhyeoklee.som.ui.view_model.MainViewModel;
 import com.junhyeoklee.som.ui.view_model.WaterGraphViewModel;
 import com.junhyeoklee.som.util.DateUtil;
 import com.junhyeoklee.som.util.InjectorUtils;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -108,23 +93,35 @@ public class WaterGraphFragment extends Fragment {
 
     private void initBarChart(){
 
+        ArrayList<String> labels = new ArrayList<>();
+        labels.add("0");
+        labels.add("1");
+        labels.add("2");
+        labels.add("3");
+        labels.add("4");
+        labels.add("5");
+        labels.add("6");
+        labels.add("7");
+        labels.add("8");
+        labels.add("9");
+        labels.add("10");
+        labels.add("11");
+        labels.add("12");
+
         barChart.getDescription().setEnabled(false);
-
         barChart.setMaxVisibleValueCount(60);
-
         barChart.setPinchZoom(false);
-
         barChart.setDrawBarShadow(false);
         barChart.setDrawGridBackground(false);
-
         XAxis xAxis = barChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
+        xAxis.setDrawLabels(true);
+        xAxis.setLabelCount(13);
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
 
         barChart.getAxisLeft().setDrawGridLines(false);
-
         barChart.animateY(1500);
-
         barChart.getLegend().setEnabled(false);
 
 
@@ -170,7 +167,7 @@ public class WaterGraphFragment extends Fragment {
 //        barEntries.add(new BarEntry(12,22000));
 //        initBarDataSet(barEntries);
 
-}
+    }
 
     private void TotalWaterAmout(final List<WaterEntry> waters) {
         float TotalDrinkValue = 0;
@@ -184,14 +181,14 @@ public class WaterGraphFragment extends Fragment {
         for(int i = 0 ; i< waters.size() ; i++) {
             int finalI = i;
             viewModel.getWater_dateMonth(getYearsTime+"-0"+i).observe(this, waterEntries -> {
-                    mWaterEntryList = waterEntries;
-                    mAmount = getTotalDrinkValue(mWaterEntryList);
-                    if (mAmount != 0) {
-                        barEntries.add(new BarEntry(finalI, mAmount));// 1월에 마신 모든양 y에 넣기 없으면 0 이면 0
-                    } else {
-                        barEntries.add(new BarEntry(finalI, 0));// 1월에 마신 모든양 y에 넣기 없으면 0 이면 0
-                    }
-                    initBarDataSet(barEntries);
+                mWaterEntryList = waterEntries;
+                mAmount = getTotalDrinkValue(mWaterEntryList);
+                if (mAmount != 0) {
+                    barEntries.add(new BarEntry(finalI, mAmount));// 1월에 마신 모든양 y에 넣기 없으면 0 이면 0
+                } else {
+                    barEntries.add(new BarEntry(finalI, 0));// 1월에 마신 모든양 y에 넣기 없으면 0 이면 0
+                }
+                initBarDataSet(barEntries);
             });
         }
 
@@ -207,31 +204,11 @@ public class WaterGraphFragment extends Fragment {
         }
         return TotalDrinkValue;
     }
-//    private int TotalWaterDate(List<WaterEntry> waters){
-//        String ToatalDateValue = "";
-//        mDateStr = Integer.parseInt(mStr.substring(mStr.lastIndexOf("-")+1));
-//        String str = "";
-//        int dateStr = 0;
-//        for(int i = 0 ; i < waters.size(); i++){
-//             str = waters.get(i).getDate();
-//             dateStr = Integer.parseInt(str.substring(str.lastIndexOf("-")+1));
-////            ToatalDateValue = waters.get(i).getDate();
-//        }
-//        return dateStr;
-//    }
 
     private void initBarDataSet(ArrayList<BarEntry> barEntries){
         // BarDataSet 생성
         BarDataSet barDataSet;
 
-        ArrayList<String> labels = new ArrayList<>();
-        labels.add("일");
-        labels.add("월");
-        labels.add("화");
-        labels.add("수");
-        labels.add("목");
-        labels.add("금");
-        labels.add("토");
 
         if(barChart.getData() != null &&
                 barChart.getData().getDataSetCount() > 0){
@@ -246,24 +223,49 @@ public class WaterGraphFragment extends Fragment {
 
             ArrayList<IBarDataSet> dataSets = new ArrayList<>();
             dataSets.add(barDataSet);
-
             BarData data = new BarData(dataSets);
             barChart.setData(data);
             barChart.setFitBars(true);
         }
         for (IDataSet set : barChart.getData().getDataSets())
             set.setDrawValues(!set.isDrawValuesEnabled());
-
-        barChart.setPinchZoom(false);
+//        barChart.setPinchZoom(false);
         barChart.invalidate();
+
+//        ArrayList<String> labels = new ArrayList<>();
+//        labels.add("1");
+//        labels.add("2");
+//        labels.add("3");
+//        labels.add("4");
+//        labels.add("5");
+//        labels.add("6");
+//        labels.add("7");
+//        labels.add("8");
+//        labels.add("9");
+//        labels.add("10");
+//        labels.add("11");
+//        labels.add("12");
+//
+//
+//        //X-axis
+//        XAxis xAxis = barChart.getXAxis();
+//
+//        xAxis.setGranularity(1f);
+//        xAxis.setGranularityEnabled(true);
+//        xAxis.setCenterAxisLabels(true);
+//        xAxis.setDrawGridLines(false);
+//        xAxis.setAxisMaximum(labels.size());
+//        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+//        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
+
+        //Y-axis
+//        barChart.getAxisRight().setEnabled(false);
+//        YAxis leftAxis = barChart.getAxisLeft();
+//        leftAxis.setValueFormatter(new LargeValueFormatter());
+//        leftAxis.setDrawGridLines(true);
+//        leftAxis.setSpaceTop(35f);
+//        leftAxis.setAxisMinimum(0f);
+
     }
 
-    private void initializeChart(int dayCount) {
-        float TotalAmout = 0f;
-        float Max = 0f;
-        float sumCount = 0f;
-        ArrayList<Entry> entries = new ArrayList<>();
-        for(int i = 0; i < dayCount;i++ ){
-        }
-    }
 }

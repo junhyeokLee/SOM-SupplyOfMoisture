@@ -1,7 +1,7 @@
 package com.junhyeoklee.som;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import android.util.Log;
 
 import com.junhyeoklee.som.data.model.WaterDao;
@@ -26,7 +26,6 @@ public class WaterRepository {
         mWaterNetworkRoot = waterNetworkRoot;
         mExcutors = executors;
     }
-
 
     public synchronized static WaterRepository getInstance(WaterDao waterDao,WaterNetworkRoot waterNetworkRoot,
                                                            AppExecutors executors){

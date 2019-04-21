@@ -1,10 +1,8 @@
 package com.junhyeoklee.som.ui.view_model;
 
-import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.junhyeoklee.som.data.database.WaterDatabase;
 import com.junhyeoklee.som.data.model.WaterEntry;
@@ -20,6 +18,6 @@ public class MainViewModel extends ViewModel{
             this.waters = database.waterDao().loadAllWaters();
         }
     }
-        public LiveData<List<WaterEntry>> getWaters(){return waters;}
+    public LiveData<List<WaterEntry>> getWaters(){return waters;}
 
-    }
+}

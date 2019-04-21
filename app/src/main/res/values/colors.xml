@@ -1,6 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary1">#3F51B5</color>
+    <color name="colorPrimaryDark1">#303F9F</color>
+    <color name="colorAccent1">#FF4081</color>
+    <color name="primary">#00BCD4</color>
+    <color name="primary_dark">#0097A7</color>
+    <color name="primary_light">#B2EBF2</color>
+    <color name="accent">#FF4081</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
+
+    <color name="colorPrimary">#F5F5F5</color>
+    <color name="colorPrimaryDark">#E0E0E0</color>
+    <color name="colorAccent">#448AFF</color>
+    <color name="colorForeground">#FFFFFF</color>
+
+    <color name="textColorPrimary">#DE000000</color>
+    <color name="textColorSecondary">#8A000000</color>
+
+    <color name="colorNightPrimary">#212121</color>
+    <color name="colorNightPrimaryDark">#000000</color>
+    <color name="colorNightAccent">#FF5252</color>
+    <color name="colorNightForeground">#424242</color>
+
+    <color name="textColorPrimaryNight">#FFFFFF</color>
+    <color name="textColorSecondaryNight">#B3FFFFFF</color>
+
+    <color name="colorIndeterminateBackground">#30565656</color>
+    <color name="colorIndeterminateText">#606060</color>
+
+    <color name="timedatepicker_colorAccent">#ef5350</color>
+    <color name="timedatepicker_colorBackgroundPrimary">#FFFFFF</color>
+    <color name="timedatepicker_colorBackgroundSecondary">#F5F5F5</color>
+    <color name="timedatepicker_dividerColor">#30000000</color>
+    <color name="timedatepicker_textColorAccent">#FFFFFF</color>
+    <color name="timedatepicker_textColorPrimary">#8A000000</color>
+    <color name="timedatepicker_textColorSecondary">#64000000</color>
+    <string name="timedatepickers_day">Day</string>
+    <string name="timedatepickers_hours">Hours</string>
+    <string name="timedatepickers_minutes">Minutes</string>
+    <string name="timedatepickers_month">Month</string>
+    <string name="timedatepickers_year">Year</string>
+    <style name="TimeDatePickers.Dialog.BottomSheet" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowMinWidthMajor">100%</item>
+        <item name="android:windowMinWidthMinor">100%</item>
+        <!--<item name="android:windowAnimationStyle">@style/TimeDatePickers.Dialog.BottomSheet.SlideAnimation</item>-->
+    </style>
+    <!--<style name="TimeDatePickers.Dialog.BottomSheet.SlideAnimation">-->
+    <!--<item name="android:windowEnterAnimation">@anim/timedatepickers_sheet_in</item>-->
+    <!--<item name="android:windowExitAnimation">@anim/timedatepickers_sheet_out</item>-->
+    <!--</style>-->
+
 </resources>

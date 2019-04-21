@@ -1,17 +1,17 @@
 package com.junhyeoklee.som.ui.fragment;
 
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +45,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
+import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
 
 public class WaterListFragment extends Fragment {
@@ -120,8 +120,8 @@ public class WaterListFragment extends Fragment {
 
         // 물을 마셨던 모든 날짜들 Decoration 이벤트 주기
         MainViewModelFactory mainFactory = new MainViewModelFactory(mDb);
-         mainViewModel = ViewModelProviders.of(this, mainFactory).get(MainViewModel.class);
-         mainViewModel.getWaters().observe(this,waterEntries -> {
+        mainViewModel = ViewModelProviders.of(this, mainFactory).get(MainViewModel.class);
+        mainViewModel.getWaters().observe(this,waterEntries -> {
             String[] result;
             for(int i = 0 ; i < waterEntries.size() ; i++){
                 result = new String[]{waterEntries.get(i).getDate(),waterEntries.get(i).getDate()};
