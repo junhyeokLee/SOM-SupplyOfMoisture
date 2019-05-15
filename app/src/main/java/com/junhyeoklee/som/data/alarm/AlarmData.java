@@ -21,12 +21,10 @@ import androidx.annotation.Nullable;
 public class AlarmData implements Parcelable {
 
     private int id;
-    public String name;
     public Calendar time;
     public boolean isEnabled = true;
     public boolean[] days = new boolean[7];
     public boolean isVibrate = true;
-    public SoundData sound;
 
     public AlarmData(int id, Calendar time){
     this.id = id;
@@ -35,27 +33,23 @@ public class AlarmData implements Parcelable {
 
     public AlarmData(int id, Context context){
         this.id = id;
-        name = AlarmPreferenceData.ALARM_NAME.getSpecificOverriddenValue(context,getName(context),id);
         time = Calendar.getInstance();
         time.setTimeInMillis((long) AlarmPreferenceData.ALARM_TIME.getSpecificValue(context,id));
         isEnabled = AlarmPreferenceData.ALARM_ENABLED.getSpecificValue(context,id);
-        for(int i = 0; i < 7; i++){
-            days[i] = AlarmPreferenceData.ALARM_DAY_ENABLED.getSpecificValue(context,id,i);
-        }
+//        for(int i = 0; i < 7; i++){
+//            days[i] = AlarmPreferenceData.ALARM_DAY_ENABLED.getSpecificValue(context,id,i);
+//        }
         isVibrate = AlarmPreferenceData.ALARM_VIBRATE.getSpecificValue(context,id);
-        sound = SoundData.fromString(AlarmPreferenceData.ALARM_SOUND.getSpecificOverriddenValue(context, AlarmPreferenceData.DEFAULT_ALARM_RINGTONE.getValue(context, ""), id));
 
     }
 
     public void onIdChanged(int id, Context context){
-        AlarmPreferenceData.ALARM_NAME.setValue(context,getName(context),id);
         AlarmPreferenceData.ALARM_TIME.setValue(context,time != null ? time.getTimeInMillis() : null, id);
         AlarmPreferenceData.ALARM_ENABLED.setValue(context,isEnabled,id);
-        for(int i = 0; i < 7 ; i++){
-            AlarmPreferenceData.ALARM_DAY_ENABLED.setValue(context,days[i],id,i);
-        }
+//        for(int i = 0; i < 7 ; i++){
+//            AlarmPreferenceData.ALARM_DAY_ENABLED.setValue(context,days[i],id,i);
+//        }
         AlarmPreferenceData.ALARM_VIBRATE.setValue(context,isVibrate,id);
-        AlarmPreferenceData.ALARM_SOUND.setValue(context, sound != null ? sound.toString() : null, id);
 
         onRemoved(context);
         this.id = id;
@@ -65,20 +59,12 @@ public class AlarmData implements Parcelable {
 
     public void onRemoved(Context context){
         cancel(context,(AlarmManager) context.getSystemService(Context.ALARM_SERVICE));
-        AlarmPreferenceData.ALARM_NAME.setValue(context,null,id);
         AlarmPreferenceData.ALARM_TIME.setValue(context,null, id);
         AlarmPreferenceData.ALARM_ENABLED.setValue(context,null,id);
         for(int i = 0; i < 7 ; i++){
             AlarmPreferenceData.ALARM_DAY_ENABLED.setValue(context,null,id,i);
         }
         AlarmPreferenceData.ALARM_VIBRATE.setValue(context,null,id);
-        AlarmPreferenceData.ALARM_SOUND.setValue(context, null, id);
-    }
-
-    public String getName(Context context){
-        if(name != null)
-            return name;
-        else return context.getString(R.string.title_alarm,id+1);
     }
 
     public boolean isRepeat(){
@@ -87,11 +73,6 @@ public class AlarmData implements Parcelable {
                 return true;
         }
         return false;
-    }
-
-    public void setName(Context context,String name){
-        this.name = name;
-        AlarmPreferenceData.ALARM_NAME.setValue(context,name,id);
     }
 
     public void setTime(Context context,AlarmManager manager, long timeMillis){
@@ -120,20 +101,6 @@ public class AlarmData implements Parcelable {
     public void setVibrate(Context context, boolean isVibrate) {
         this.isVibrate = isVibrate;
         AlarmPreferenceData.ALARM_VIBRATE.setValue(context, isVibrate, id);
-    }
-
-    public boolean hasSound() {
-        return sound != null;
-    }
-
-    @Nullable
-    public SoundData getSound() {
-        return sound;
-    }
-
-    public void setSound(Context context, @Nullable SoundData sound) {
-        this.sound = sound;
-        AlarmPreferenceData.ALARM_SOUND.setValue(context, sound != null ? sound.toString() : null, id);
     }
 
     @Nullable
@@ -220,14 +187,12 @@ public class AlarmData implements Parcelable {
 
     protected AlarmData(Parcel in) {
         id = in.readInt();
-        name = in.readString();
         time = Calendar.getInstance();
         time.setTimeInMillis(in.readLong());
         isEnabled = in.readByte() != 0;
         days = in.createBooleanArray();
         isVibrate = in.readByte() != 0;
-        if (in.readByte() == 1)
-            sound = SoundData.fromString(in.readString());
+
     }
 
     public static final Creator<AlarmData> CREATOR = new Creator<AlarmData>() {
@@ -250,13 +215,10 @@ public class AlarmData implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
-        dest.writeString(name);
         dest.writeLong(time.getTimeInMillis());
         dest.writeByte((byte) (isEnabled ? 1 : 0));
         dest.writeBooleanArray(days);
         dest.writeByte((byte) (isVibrate ? 1 : 0));
-        dest.writeByte((byte) (sound != null ? 1 : 0));
-        if (sound != null)
-            dest.writeString(sound.toString());
+
     }
 }

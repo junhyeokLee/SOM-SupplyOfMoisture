@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.junhyeoklee.som">
+
     <uses-permission android:name="android.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="com.junhyeoklee.som.permission.ALARM" />
@@ -9,16 +10,17 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-
     <application
-        android:name="com.junhyeoklee.som.Alarmio"
+        android:name=".Alarmio"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activity.MainActivity"
+        <activity android:name=".ui.activity.AlarmActivity2"></activity>
+        <activity
+            android:name=".ui.activity.MainActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,16 +28,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.activity.AlarmActivity"
-            android:launchMode="singleTask"/>
+        <activity
+            android:name=".ui.activity.AlarmActivity"
+            android:launchMode="singleTask" />
 
         <service android:name=".services.SleepReminderService" />
         <service android:name=".services.TimerService" />
 
         <receiver android:name=".receivers.AlarmReceiver" />
         <receiver android:name=".receivers.TimerReceiver" />
-
     </application>
 
 </manifest>

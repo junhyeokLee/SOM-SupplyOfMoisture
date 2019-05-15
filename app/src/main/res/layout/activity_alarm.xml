@@ -37,16 +37,15 @@
                 android:text="June 14 2017, 3:49 PM"
                 android:textAlignment="center"
                 android:textColor="?android:textColorPrimary"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/time"
-                android:layout_width="wrap_content"
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="-0:13"
-                android:textAlignment="center"
+                android:text="물 마실 시간입니다."
                 android:textColor="?android:textColorPrimary"
                 android:textSize="48sp" />
 

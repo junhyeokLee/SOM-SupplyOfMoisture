@@ -6,20 +6,24 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.afollestad.aesthetic.Aesthetic;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.junhyeoklee.som.Alarmio;
 import com.junhyeoklee.som.R;
 import com.junhyeoklee.som.data.alarm.AlarmData;
 import com.junhyeoklee.som.data.alarm.AlarmPreferenceData;
 import com.junhyeoklee.som.ui.adapter.AlarmSimplePagerAdapter;
+import com.junhyeoklee.som.ui.adapter.AlarmsAdapter;
 import com.junhyeoklee.som.ui.view.AestheticTimeSheetPickerDialog;
 import com.junhyeoklee.som.ui.view.AlarmPageIndicatorView;
 
@@ -32,6 +36,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 import androidx.viewpager.widget.ViewPager;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -53,6 +58,7 @@ public class AlarmHomeFragment extends AlarmBaseFragment {
     private FloatingActionButton menu;
     private TitleFAB alarmFab;
 
+
     private AlarmSimplePagerAdapter pagerAdapter;
     private AlarmSimplePagerAdapter timeAdapter;
 
@@ -63,6 +69,8 @@ public class AlarmHomeFragment extends AlarmBaseFragment {
     private Disposable colorAccentSubscription;
     private Disposable textColorPrimarySubscription;
     private Disposable textColorPrimaryInverseSubscription;
+    private List<AlarmData> alarms;
+
 
     @Nullable
     @Override
@@ -76,6 +84,7 @@ public class AlarmHomeFragment extends AlarmBaseFragment {
         background = view.findViewById(R.id.background);
         overlay = view.findViewById(R.id.overlay);
         menu = view.findViewById(R.id.fabsMenu);
+
 
         behavior = BottomSheetBehavior.from(bottomSheet);
         behavior.setHideable(false);
@@ -259,5 +268,6 @@ public class AlarmHomeFragment extends AlarmBaseFragment {
         textColorPrimaryInverseSubscription.dispose();
         super.onDestroyView();
     }
+
 
 }

@@ -15,7 +15,6 @@ import com.junhyeoklee.som.ui.fragment.AlarmHomeFragment;
 import com.junhyeoklee.som.ui.fragment.AlarmsFragment;
 import com.junhyeoklee.som.ui.fragment.MainFragment;
 import com.junhyeoklee.som.ui.fragment.SplashFragment;
-import com.junhyeoklee.som.ui.fragment.TimerFragment;
 import com.junhyeoklee.som.ui.fragment.WaterGraphFragment;
 import com.junhyeoklee.som.ui.fragment.WaterListFragment;
 
@@ -117,9 +116,9 @@ public class MainActivity extends AestheticActivity implements FragmentManager.O
                 if (alarmio.getTimers().size() <= id || id < 0)
                     return;
                 Bundle args = new Bundle();
-                args.putParcelable(TimerFragment.EXTRA_TIMER, alarmio.getTimers().get(id));
-
-                fragment = new TimerFragment();
+//                args.putParcelable(TimerFragment.EXTRA_TIMER, alarmio.getTimers().get(id));
+//
+//                fragment = new TimerFragment();
                 fragment.setArguments(args);
             } else return;
 
@@ -149,7 +148,6 @@ public class MainActivity extends AestheticActivity implements FragmentManager.O
     @Override
     protected void onPause() {
         super.onPause();
-        alarmio.stopCurrentSound();
 
     }
 

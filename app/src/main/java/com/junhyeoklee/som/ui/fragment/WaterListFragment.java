@@ -69,7 +69,6 @@ public class WaterListFragment extends Fragment {
     @BindView(R.id.tv_total)
     TextView mTv_total;
 
-
     private AddWaterDateViewModel viewModel;
     private MainViewModel mainViewModel;
     private List<WaterEntry> mWaterList;
@@ -107,7 +106,6 @@ public class WaterListFragment extends Fragment {
 
         String getTime = sdf.format(calendarDate);
         Log.e(TAG, "DATE VALUE = " + " " + getTime);
-
 
         // 오늘 날짜의 리스트 보여주기
         AddWaterViewModelFactory factory = InjectorUtils.provideWaterViewModelFactory(getContext());

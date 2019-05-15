@@ -18,7 +18,6 @@ public class TimerData implements Parcelable {
     private long duration = 600000;
     private long endTime;
     public boolean isVibrate = true;
-    public SoundData sound;
 
     public TimerData(int id) {
         this.id = id;
@@ -38,7 +37,6 @@ public class TimerData implements Parcelable {
         }
 
         isVibrate = AlarmPreferenceData.TIMER_VIBRATE.getSpecificValue(context, id);
-        sound = SoundData.fromString(AlarmPreferenceData.TIMER_SOUND.getSpecificOverriddenValue(context, AlarmPreferenceData.DEFAULT_TIMER_RINGTONE.getValue(context, ""), id));
 
     }
 
@@ -52,7 +50,6 @@ public class TimerData implements Parcelable {
         AlarmPreferenceData.TIMER_DURATION.setValue(context, duration, id);
         AlarmPreferenceData.TIMER_END_TIME.setValue(context, endTime, id);
         AlarmPreferenceData.TIMER_VIBRATE.setValue(context, isVibrate, id);
-        AlarmPreferenceData.TIMER_SOUND.setValue(context, sound != null ? sound.toString() : null, id);
         onRemoved(context);
         this.id = id;
         if (isSet())
@@ -128,9 +125,7 @@ public class TimerData implements Parcelable {
      * @return              A boolean defining whether a sound has been set
      *                      for the timer.
      */
-    public boolean hasSound() {
-        return sound != null;
-    }
+
 
     /**
      * Get the [SoundData](./SoundData) sound specified for the timer.
@@ -139,10 +134,7 @@ public class TimerData implements Parcelable {
      *                      the timer should make (or null).
      */
 
-    @Nullable
-    public SoundData getSound() {
-        return sound;
-    }
+
     /**
      * Set the sound that the timer should make.
      *
@@ -151,10 +143,7 @@ public class TimerData implements Parcelable {
      *                      the timer should make.
      */
 
-    public void setSound(Context context, SoundData sound) {
-        this.sound = sound;
-        AlarmPreferenceData.TIMER_SOUND.setValue(context, sound != null ? sound.toString() : null, id);
-    }
+
     /**
      * Set the next time for the timer to ring.
      *
@@ -216,9 +205,7 @@ public class TimerData implements Parcelable {
         parcel.writeLong(duration);
         parcel.writeLong(endTime);
         parcel.writeByte((byte) (isVibrate ? 1 : 0));
-        parcel.writeByte((byte) (sound != null ? 1 : 0));
-        if (sound != null)
-            parcel.writeString(sound.toString());
+
 
     }
 
@@ -227,8 +214,6 @@ public class TimerData implements Parcelable {
         duration = in.readLong();
         endTime = in.readLong();
         isVibrate = in.readByte() != 0;
-        if (in.readByte() == 1)
-            sound = SoundData.fromString(in.readString());
 
     }
 

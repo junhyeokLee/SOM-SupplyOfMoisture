@@ -22,7 +22,6 @@ public class WaterListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private List<WaterEntry> mWaterEntries;
     private SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
 
-
     public WaterListAdapter(Context context){
         mContext = context;
     }

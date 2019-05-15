@@ -21,7 +21,6 @@ import com.junhyeoklee.som.Alarmio;
 import com.junhyeoklee.som.R;
 import com.junhyeoklee.som.data.alarm.AlarmData;
 import com.junhyeoklee.som.data.alarm.AlarmPreferenceData;
-import com.junhyeoklee.som.data.alarm.SoundData;
 import com.junhyeoklee.som.data.alarm.TimerData;
 import com.junhyeoklee.som.util.AlarmFormatUtils;
 import com.junhyeoklee.som.util.AlarmImageUtils;
@@ -44,7 +43,6 @@ public class AlarmActivity extends AestheticActivity implements SlideActionListe
 
     private View overlay;
     private TextView date;
-    private TextView time;
     private SlideActionView actionView;
 
     private Alarmio alarmio;
@@ -54,7 +52,6 @@ public class AlarmActivity extends AestheticActivity implements SlideActionListe
     private long triggerMillis;
     private AlarmData alarm;
     private TimerData timer;
-    private SoundData sound;
     private boolean isVibrate;
 
     private boolean isSlowWake;
@@ -76,29 +73,10 @@ public class AlarmActivity extends AestheticActivity implements SlideActionListe
 
         overlay = findViewById(R.id.overlay);
         date = findViewById(R.id.date);
-        time = findViewById(R.id.time);
         actionView = findViewById(R.id.slideView);
 
-        textColorPrimaryInverseSubscription = Aesthetic.Companion.get()
-                .textColorPrimaryInverse()
-                .subscribe(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer integer) throws Exception {
-                        overlay.setBackgroundColor(integer);
-                    }
-                });
-
-        isDarkSubscription = Aesthetic.Companion.get()
-                .isDark()
-                .subscribe(new Consumer<Boolean>() {
-                    @Override
-                    public void accept(Boolean aBoolean) throws Exception {
-                        isDark = aBoolean;
-                    }
-                });
-
-        actionView.setLeftIcon(VectorDrawableCompat.create(getResources(), R.drawable.ic_snooze, getTheme()));
-        actionView.setRightIcon(VectorDrawableCompat.create(getResources(), R.drawable.ic_close, getTheme()));
+        actionView.setLeftIcon(VectorDrawableCompat.create(getResources(), R.drawable.ic_close, getTheme()));
+        actionView.setRightIcon(VectorDrawableCompat.create(getResources(), R.drawable.water_main, getTheme()));
         actionView.setListener(this);
 
         isSlowWake = AlarmPreferenceData.SLOW_WAKE_UP.getValue(this);
@@ -108,14 +86,10 @@ public class AlarmActivity extends AestheticActivity implements SlideActionListe
         if (isAlarm) {
             alarm = getIntent().getParcelableExtra(EXTRA_ALARM);
             isVibrate = alarm.isVibrate;
-            if (alarm.hasSound())
-                sound = alarm.getSound();
         }
         else if(getIntent().hasExtra(EXTRA_TIMER)){
             timer = getIntent().getParcelableExtra(EXTRA_TIMER);
             isVibrate = timer.isVibrate;
-            if (timer.hasSound())
-                sound = timer.getSound();
         }
         else finish();
 
@@ -128,32 +102,24 @@ public class AlarmActivity extends AestheticActivity implements SlideActionListe
         runnable = new Runnable() {
             @Override
             public void run() {
-                long elapsedMillis = System.currentTimeMillis() - triggerMillis;
-                String text = AlarmFormatUtils.formatMillis(elapsedMillis);
-                time.setText(String.format("-%s", text.substring(0, text.length() - 3)));
 
                 if (isVibrate) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                         vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
                     else vibrator.vibrate(500);
                 }
-                if (sound != null && !sound.isPlaying(alarmio))
-                    sound.play(alarmio);
 
-                if (alarm != null && isSlowWake) {
-                    WindowManager.LayoutParams params = getWindow().getAttributes();
-                    params.screenBrightness = Math.max(0.01f, Math.min(1f, (float) elapsedMillis / slowWakeMillis));
-                    getWindow().setAttributes(params);
-                    getWindow().addFlags(WindowManager.LayoutParams.FLAGS_CHANGED);
-                }
+//                if (alarm != null && isSlowWake) {
+//                    WindowManager.LayoutParams params = getWindow().getAttributes();
+//                    params.screenBrightness = Math.max(0.01f, Math.min(1f, (float) elapsedMillis / slowWakeMillis));
+//                    getWindow().setAttributes(params);
+//                    getWindow().addFlags(WindowManager.LayoutParams.FLAGS_CHANGED);
+//                }
 
                 handler.postDelayed(this, 1000);
             }
         };
         handler.post(runnable);
-
-        if (sound != null)
-            sound.play(alarmio);
 
         com.junhyeoklee.som.services.SleepReminderService.refreshSleepTime(alarmio);
 
@@ -184,9 +150,6 @@ public class AlarmActivity extends AestheticActivity implements SlideActionListe
     private void stopAnnoyingness() {
         if (handler != null)
             handler.removeCallbacks(runnable);
-
-        if (sound != null && sound.isPlaying(alarmio))
-            sound.stop(alarmio);
     }
 
     @Override
@@ -197,46 +160,49 @@ public class AlarmActivity extends AestheticActivity implements SlideActionListe
 
     @Override
     public void onSlideLeft() {
-        final int[] minutes = new int[]{2, 5, 10, 20, 30, 60};
-        CharSequence[] names = new CharSequence[minutes.length + 1];
-        for (int i = 0; i < minutes.length; i++) {
-            names[i] = AlarmFormatUtils.formatUnit(AlarmActivity.this, minutes[i]);
-        }
-
-        names[minutes.length] = getString(R.string.title_snooze_custom);
-
-        stopAnnoyingness();
-        new AlertDialog.Builder(AlarmActivity.this, isDark ? R.style.Theme_AppCompat_Dialog_Alert : R.style.Theme_AppCompat_Light_Dialog_Alert)
-                .setItems(names, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which < minutes.length) {
-                            TimerData timer = alarmio.newTimer();
-                            timer.setDuration(TimeUnit.MINUTES.toMillis(minutes[which]), alarmio);
-                            timer.setVibrate(AlarmActivity.this, isVibrate);
-                            timer.setSound(AlarmActivity.this, sound);
-                            timer.set(alarmio, ((AlarmManager) AlarmActivity.this.getSystemService(Context.ALARM_SERVICE)));
-                            alarmio.onTimerStarted();
-
-                            finish();
-                        }
-
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
-
         overlay.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+        finish();
+//        final int[] minutes = new int[]{2, 5, 10, 20, 30, 60};
+//        CharSequence[] names = new CharSequence[minutes.length + 1];
+//        for (int i = 0; i < minutes.length; i++) {
+//            names[i] = AlarmFormatUtils.formatUnit(AlarmActivity.this, minutes[i]);
+//        }
+//
+//        names[minutes.length] = getString(R.string.title_snooze_custom);
+//
+//        stopAnnoyingness();
+//        new AlertDialog.Builder(AlarmActivity.this, isDark ? R.style.Theme_AppCompat_Dialog_Alert : R.style.Theme_AppCompat_Light_Dialog_Alert)
+//                .setItems(names, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        if (which < minutes.length) {
+//                            TimerData timer = alarmio.newTimer();
+//                            timer.setDuration(TimeUnit.MINUTES.toMillis(minutes[which]), alarmio);
+//                            timer.setVibrate(AlarmActivity.this, isVibrate);
+//                            timer.set(alarmio, ((AlarmManager) AlarmActivity.this.getSystemService(Context.ALARM_SERVICE)));
+//                            alarmio.onTimerStarted();
+//
+//                            finish();
+//                        }
+//
+//                    }
+//                })
+//                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                    }
+//                })
+//                .show();
+//
+//        overlay.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
     }
 
     @Override
     public void onSlideRight() {
         overlay.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+        Intent lIntetn = new Intent(AlarmActivity.this,MainActivity.class);
+        startActivity(lIntetn);
         finish();
     }
 }

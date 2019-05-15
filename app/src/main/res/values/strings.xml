@@ -66,10 +66,10 @@
     <string name="desc_sleep_reminder">Send a notification reminding you to go to sleep a certain time before your alarm rings if you\'re using your phone.</string>
     <string name="title_sleep_reminder_time">Sleep Reminder Time</string>
     <string name="desc_sleep_reminder_time">%1$d hours before</string>
-    <string name="msg_alarms_empty">You don\'t have any alarms set. Press the \'+\' button to create one.</string>
+    <string name="msg_alarms_empty">알람이 설정되지 않았습니다. + 버튼을 눌러주세요.</string>
     <string name="msg_time_zones_selected">%d Selected</string>
     <string name="msg_sleep_reminder">Your next alarm will ring approximately %s from now. To get your specified amount of sleep in the settings menu, you should go to bed now.</string>
-    <string name="msg_delete_confirmation">Are you sure you want to delete %s?</string>
+    <string name="msg_delete_confirmation">알람을 삭제 하시겠습니까?</string>
     <string name="title_delete">Delete</string>
     <string name="title_snooze_custom">Custom…</string>
     <string name="title_set_stopwatch">Stopwatch</string>

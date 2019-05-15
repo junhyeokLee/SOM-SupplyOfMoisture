@@ -23,12 +23,10 @@ public enum AlarmPreferenceData {
     SLEEP_REMINDER_TIME(25200000L), //milliseconds
     SLOW_WAKE_UP(true),
     SLOW_WAKE_UP_TIME(300000L), //milliseconds
-    ALARM_NAME("%d/ALARM_NAME", null),
     ALARM_TIME("%d/ALARM_TIME", (long) 0),
     ALARM_ENABLED("%d/ALARM_ENABLED", true),
     ALARM_DAY_ENABLED("%1$d/ALARM_DAY/%2$d/ENABLED", false),
     ALARM_VIBRATE("%d/ALARM_VIBRATE", true),
-    ALARM_SOUND("%d/ALARM_SOUND", ""),
     TIMER_DURATION("%d/TIMER_DURATION", 600000),
     TIMER_END_TIME("%d/TIMER_END_TIME", 0),
     TIMER_VIBRATE("%d/TIMER_VIBRATE", true),

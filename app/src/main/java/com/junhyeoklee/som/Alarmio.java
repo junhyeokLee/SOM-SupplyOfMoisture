@@ -18,21 +18,13 @@ import android.widget.Toast;
 import com.afollestad.aesthetic.Aesthetic;
 import com.afollestad.aesthetic.AutoSwitchMode;
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.source.hls.HlsMediaSource;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 import com.junhyeoklee.som.data.alarm.AlarmData;
 import com.junhyeoklee.som.data.alarm.AlarmPreferenceData;
-import com.junhyeoklee.som.data.alarm.SoundData;
 import com.junhyeoklee.som.data.alarm.TimerData;
 import com.junhyeoklee.som.services.SleepReminderService;
 import com.junhyeoklee.som.services.TimerService;
@@ -61,16 +53,12 @@ public class Alarmio extends Application implements Player.EventListener {
     private SharedPreferences prefs;
     private SunriseSunsetCalculator sunsetCalculator;
 
-    private Ringtone currentRingtone;
-
     private List<AlarmData> alarms;
     private List<TimerData> timers;
 
     private List<AlarmioListener> listeners;
     private ActivityListener listener;
 
-    private SimpleExoPlayer player;
-    private HlsMediaSource.Factory mediaSourceFactory;
     private String currentStream;
 
     @Override
@@ -82,11 +70,6 @@ public class Alarmio extends Application implements Player.EventListener {
         alarms = new ArrayList<>();
         timers = new ArrayList<>();
 
-        player = ExoPlayerFactory.newSimpleInstance(this, new DefaultTrackSelector());
-        player.addListener(this);
-
-        DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(this, Util.getUserAgent(this, "exoplayer2example"), null);
-        mediaSourceFactory = new HlsMediaSource.Factory(dataSourceFactory);
 
         int alarmLength = AlarmPreferenceData.ALARM_LENGTH.getValue(this);
         for (int id = 0; id < alarmLength; id++) {
@@ -121,7 +104,6 @@ public class Alarmio extends Application implements Player.EventListener {
      */
     public AlarmData newAlarm() {
         AlarmData alarm = new AlarmData(alarms.size(), Calendar.getInstance());
-        alarm.sound = SoundData.fromString(AlarmPreferenceData.DEFAULT_ALARM_RINGTONE.getValue(this, ""));
         alarms.add(alarm);
         onAlarmCountChanged();
         return alarm;
@@ -367,89 +349,6 @@ public class Alarmio extends Application implements Player.EventListener {
         return sunsetCalculator;
     }
 
-    /**
-     * Determine if a ringtone is currently playing.
-     *
-     * @return          True if a ringtone is currently playing.
-     */
-    public boolean isRingtonePlaying() {
-        return currentRingtone != null && currentRingtone.isPlaying();
-    }
-
-    /**
-     * Get the currently playing ringtone.
-     *
-     * @return          The currently playing ringtone, or null.
-     */
-    @Nullable
-    public Ringtone getCurrentRingtone() {
-        return currentRingtone;
-    }
-
-    public void playRingtone(Ringtone ringtone) {
-        if (!ringtone.isPlaying()) {
-            stopCurrentSound();
-            ringtone.play();
-        }
-
-        currentRingtone = ringtone;
-    }
-
-    /**
-     * Play a stream ringtone.
-     *
-     * @param url       The URL of the stream to be passed to ExoPlayer.
-     * @see [ExoPlayer Repo](https://github.com/google/ExoPlayer)
-     */
-    public void playStream(String url) {
-        stopCurrentSound();
-        player.prepare(mediaSourceFactory.createMediaSource(Uri.parse(url)));
-        player.setPlayWhenReady(true);
-        currentStream = url;
-    }
-
-    /**
-     * Play a stream ringtone.
-     *
-     * @param url           The URL of the stream to be passed to ExoPlayer.
-     * @param attributes    The attributes to play the stream with.
-     * @see [ExoPlayer Repo](https://github.com/google/ExoPlayer)
-     */
-    public void playStream(String url, AudioAttributes attributes) {
-        player.stop();
-        player.setAudioAttributes(attributes);
-        playStream(url);
-    }
-
-    /**
-     * Stop the currently playing stream.
-     */
-    public void stopStream() {
-        player.stop();
-        currentStream = null;
-    }
-
-    /**
-     * Determine if the passed url matches the stream that is currently playing.
-     *
-     * @param url           The URL to match the current stream to.
-     * @return              True if the URL matches that of the currently playing
-     *                      stream.
-     */
-    public boolean isPlayingStream(String url) {
-        return currentStream != null && currentStream.equals(url);
-    }
-
-    /**
-     * Stop the currently playing sound, regardless of whether it is a ringtone
-     * or a stream.
-     */
-    public void stopCurrentSound() {
-        if (isRingtonePlaying())
-            currentRingtone.stop();
-
-        stopStream();
-    }
 
     public void addListener(AlarmioListener listener) {
         listeners.add(listener);
