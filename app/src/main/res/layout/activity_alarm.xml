@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keepScreenOn="true">
@@ -8,6 +9,7 @@
         android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/blue"
         android:scaleType="centerCrop" />
 
     <View
@@ -33,6 +35,7 @@
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/nanumbarunpenr"
                 android:gravity="center"
                 android:text="June 14 2017, 3:49 PM"
                 android:textAlignment="center"
@@ -44,10 +47,11 @@
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/nanumbarunpenr"
                 android:gravity="center"
                 android:text="물 마실 시간입니다."
                 android:textColor="?android:textColorPrimary"
-                android:textSize="48sp" />
+                android:textSize="36sp" />
 
         </LinearLayout>
 

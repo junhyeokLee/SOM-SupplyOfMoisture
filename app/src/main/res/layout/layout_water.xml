@@ -1,55 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?><!-- This linear layout contains a single item displayed in the MainActivity -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:paddingLeft="8dp"
-    android:paddingTop="8dp"
-    android:paddingRight="8dp"
-    android:paddingBottom="8dp"
+    android:layout_height="80dp"
+    android:gravity="center"
+    android:orientation="horizontal"
+    app:layout_gravity="center"
     tools:context="com.junhyeoklee.som.ui.activity.MainActivity">
 
     <!-- A priority circle that is colored in programmatically in the adapter code -->
 
     <LinearLayout
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/img_up"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="@string/content_description_water_icon"
+            android:tint="@color/sky"
+            app:srcCompat="@drawable/ic_circle_black_24dp" />
+
+        <View
+            android:id="@+id/v_step_connector_bottom"
+            android:layout_width="4dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/sky" />
+
+        <ImageView
+            android:id="@+id/img_down"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="@string/content_description_water_icon"
+            android:tint="@color/sky"
+            app:srcCompat="@drawable/ic_circle_black_24dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="12dp"
         android:layout_weight="1"
+        android:gravity="center"
         android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/img_up"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:layout_gravity="center"
-                android:contentDescription="@string/content_description_water_icon"
-                android:tint="@color/sky"
-                app:srcCompat="@drawable/ic_circle_black_24dp" />
-
-            <View
-                android:id="@+id/v_step_connector_bottom"
-                android:layout_width="2dp"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:background="@color/colorPrimary" />
-
-            <ImageView
-                android:id="@+id/img_down"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:layout_gravity="center"
-                android:contentDescription="@string/content_description_water_icon"
-                android:tint="@color/sky"
-                app:srcCompat="@drawable/ic_circle_black_24dp" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -57,25 +61,43 @@
             android:orientation="vertical">
 
             <!-- TextView that displays the description -->
-            <TextView
-                android:id="@+id/waterAmount"
-                style="@style/TextAppearance.AppCompat.Medium"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/nanumbarunpenr"
-                android:textSize="18sp"
-                tools:text="100 ml" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/waterAmount"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanumbarunpenr"
+                    android:textColor="@color/blue"
+                    android:textSize="24sp"
+                    tools:text="100 " />
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" ml"
+                    android:textColor="@color/blue"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/taskUpdatedAt"
+                    style="@style/TextAppearance.AppCompat.Small"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanumbarunpenr"
+                    android:gravity="center"
+                    android:textColor="@color/blue"
+                    android:textSize="18sp"
+                    tools:text="11/11/1111" />
+
+            </LinearLayout>
 
             <!-- TextView that displays the update date -->
-            <TextView
-                android:id="@+id/taskUpdatedAt"
-                style="@style/TextAppearance.AppCompat.Small"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:fontFamily="@font/nanumbarunpenr"
-                android:textSize="12sp"
-                tools:text="11/11/1111" />
 
         </LinearLayout>
 

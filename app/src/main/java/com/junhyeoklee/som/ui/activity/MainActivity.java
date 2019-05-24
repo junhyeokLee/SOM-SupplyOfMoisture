@@ -9,15 +9,13 @@ import com.afollestad.aesthetic.AestheticActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.junhyeoklee.som.Alarmio;
 import com.junhyeoklee.som.R;
-import com.junhyeoklee.som.receivers.TimerReceiver;
 import com.junhyeoklee.som.ui.fragment.AlarmBaseFragment;
 import com.junhyeoklee.som.ui.fragment.AlarmHomeFragment;
-import com.junhyeoklee.som.ui.fragment.AlarmsFragment;
 import com.junhyeoklee.som.ui.fragment.MainFragment;
 import com.junhyeoklee.som.ui.fragment.SplashFragment;
 import com.junhyeoklee.som.ui.fragment.WaterGraphFragment;
+import com.junhyeoklee.som.ui.fragment.WaterGraphHomeFragment;
 import com.junhyeoklee.som.ui.fragment.WaterListFragment;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -32,11 +30,13 @@ public class MainActivity extends AestheticActivity implements FragmentManager.O
 
     private Alarmio alarmio;
     private AlarmBaseFragment fragment;
+    private FragmentManager fragmentManager = getSupportFragmentManager();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
+
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment fragment = null;
             switch (item.getItemId()) {
@@ -50,7 +50,7 @@ public class MainActivity extends AestheticActivity implements FragmentManager.O
                     fragment = new WaterListFragment();
                     break;
                 case R.id.navigation_chart:
-                    fragment = new WaterGraphFragment();
+                    fragment = new WaterGraphHomeFragment();
                     break;
 
                 case R.id.navigation_person:
@@ -65,7 +65,7 @@ public class MainActivity extends AestheticActivity implements FragmentManager.O
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
-        setContentView(R.layout.activity_alarm_main);
+        setContentView(R.layout.activity_main);
         alarmio = (Alarmio) getApplicationContext();
         alarmio.setListener(this);
 
@@ -109,18 +109,6 @@ public class MainActivity extends AestheticActivity implements FragmentManager.O
         super.onNewIntent(intent);
         if (intent.hasExtra(EXTRA_FRAGMENT)) {
             boolean shouldBackStack = fragment instanceof AlarmHomeFragment;
-
-            int fragmentId = intent.getIntExtra(EXTRA_FRAGMENT, -1);
-            if (fragmentId == FRAGMENT_TIMER && intent.hasExtra(TimerReceiver.EXTRA_TIMER_ID)) {
-                int id = intent.getIntExtra(TimerReceiver.EXTRA_TIMER_ID, 0);
-                if (alarmio.getTimers().size() <= id || id < 0)
-                    return;
-                Bundle args = new Bundle();
-//                args.putParcelable(TimerFragment.EXTRA_TIMER, alarmio.getTimers().get(id));
-//
-//                fragment = new TimerFragment();
-                fragment.setArguments(args);
-            } else return;
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_up_sheet, R.anim.slide_out_up_sheet, R.anim.slide_in_down_sheet, R.anim.slide_out_down_sheet)

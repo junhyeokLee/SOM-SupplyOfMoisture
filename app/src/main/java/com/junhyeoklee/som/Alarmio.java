@@ -8,8 +8,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.LocationManager;
-import android.media.Ringtone;
-import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
@@ -25,9 +23,7 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.junhyeoklee.som.data.alarm.AlarmData;
 import com.junhyeoklee.som.data.alarm.AlarmPreferenceData;
-import com.junhyeoklee.som.data.alarm.TimerData;
 import com.junhyeoklee.som.services.SleepReminderService;
-import com.junhyeoklee.som.services.TimerService;
 import com.luckycatlabs.sunrisesunset.SunriseSunsetCalculator;
 import com.luckycatlabs.sunrisesunset.dto.Location;
 
@@ -48,13 +44,11 @@ public class Alarmio extends Application implements Player.EventListener {
     public static final int THEME_AMOLED = 3;
 
     public static final String NOTIFICATION_CHANNEL_STOPWATCH = "stopwatch";
-    public static final String NOTIFICATION_CHANNEL_TIMERS = "timers";
 
     private SharedPreferences prefs;
     private SunriseSunsetCalculator sunsetCalculator;
 
     private List<AlarmData> alarms;
-    private List<TimerData> timers;
 
     private List<AlarmioListener> listeners;
     private ActivityListener listener;
@@ -68,7 +62,6 @@ public class Alarmio extends Application implements Player.EventListener {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         listeners = new ArrayList<>();
         alarms = new ArrayList<>();
-        timers = new ArrayList<>();
 
 
         int alarmLength = AlarmPreferenceData.ALARM_LENGTH.getValue(this);
@@ -76,25 +69,11 @@ public class Alarmio extends Application implements Player.EventListener {
             alarms.add(new AlarmData(id, this));
         }
 
-        int timerLength = AlarmPreferenceData.TIMER_LENGTH.getValue(this);
-        for (int id = 0; id < timerLength; id++) {
-            TimerData timer = new TimerData(id, this);
-            if (timer.isSet())
-                timers.add(timer);
-        }
-
-        if (timerLength > 0)
-            startService(new Intent(this, TimerService.class));
-
         SleepReminderService.refreshSleepTime(this);
     }
 
     public List<AlarmData> getAlarms() {
         return alarms;
-    }
-
-    public List<TimerData> getTimers() {
-        return timers;
     }
 
     /**
@@ -144,43 +123,6 @@ public class Alarmio extends Application implements Player.EventListener {
     }
 
     /**
-     * Create a new timer, assigning it an unused preference id.
-     *
-     * @return          The newly instantiated [TimerData](./data/TimerData).
-     */
-    public TimerData newTimer() {
-        TimerData timer = new TimerData(timers.size());
-        timers.add(timer);
-        onTimerCountChanged();
-        return timer;
-    }
-
-    /**
-     * Remove a timer and all of its preferences.
-     *
-     * @param timer     The timer to be removed.
-     */
-    public void removeTimer(TimerData timer) {
-        timer.onRemoved(this);
-
-        int index = timers.indexOf(timer);
-        timers.remove(index);
-        for (int i = index; i < timers.size(); i++) {
-            timers.get(i).onIdChanged(i, this);
-        }
-
-        onTimerCountChanged();
-        onTimersChanged();
-    }
-
-    /**
-     * Update the preferences to show that the timer count has been changed.
-     */
-    public void onTimerCountChanged() {
-        AlarmPreferenceData.TIMER_LENGTH.setValue(this, timers.size());
-    }
-
-    /**
      * Notify the application of changes to the current timers.
      */
     public void onTimersChanged() {
@@ -188,14 +130,6 @@ public class Alarmio extends Application implements Player.EventListener {
             listener.onTimersChanged();
         }
     }
-
-    /**
-     * Starts the timer service after a timer has been set.
-     */
-    public void onTimerStarted() {
-        startService(new Intent(this, TimerService.class));
-    }
-
     /**
      * Get an instance of SharedPreferences.
      *
@@ -206,82 +140,6 @@ public class Alarmio extends Application implements Player.EventListener {
         return prefs;
     }
 
-    /**
-     * Update the application theme.
-     */
-    public void updateTheme() {
-        if (isNight()) {
-            Aesthetic.Companion.get()
-                    .isDark(true)
-                    .lightStatusBarMode(AutoSwitchMode.OFF)
-                    .colorPrimary(ContextCompat.getColor(this, R.color.colorNightPrimary))
-                    .colorStatusBar(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ? Color.TRANSPARENT : ContextCompat.getColor(this, R.color.colorNightPrimaryDark))
-                    .colorNavigationBar(ContextCompat.getColor(this, R.color.colorNightPrimaryDark))
-                    .colorAccent(ContextCompat.getColor(this, R.color.colorNightAccent))
-                    .colorCardViewBackground(ContextCompat.getColor(this, R.color.colorNightForeground))
-                    .colorWindowBackground(ContextCompat.getColor(this, R.color.colorNightPrimaryDark))
-                    .textColorPrimary(ContextCompat.getColor(this, R.color.textColorPrimaryNight))
-                    .textColorSecondary(ContextCompat.getColor(this, R.color.textColorSecondaryNight))
-                    .textColorPrimaryInverse(ContextCompat.getColor(this, R.color.textColorPrimary))
-                    .textColorSecondaryInverse(ContextCompat.getColor(this, R.color.textColorSecondary))
-                    .apply();
-        } else {
-            int theme = getActivityTheme();
-            if (theme == THEME_DAY || theme == THEME_DAY_NIGHT) {
-                Aesthetic.Companion.get()
-                        .isDark(false)
-                        .lightStatusBarMode(AutoSwitchMode.ON)
-                        .colorPrimary(ContextCompat.getColor(this, R.color.colorPrimary))
-                        .colorStatusBar(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ? Color.TRANSPARENT : ContextCompat.getColor(this, R.color.colorPrimaryDark))
-                        .colorNavigationBar(ContextCompat.getColor(this, R.color.colorPrimaryDark))
-                        .colorAccent(ContextCompat.getColor(this, R.color.colorAccent))
-                        .colorCardViewBackground(ContextCompat.getColor(this, R.color.colorForeground))
-                        .colorWindowBackground(ContextCompat.getColor(this, R.color.colorPrimaryDark))
-                        .textColorPrimary(ContextCompat.getColor(this, R.color.textColorPrimary))
-                        .textColorSecondary(ContextCompat.getColor(this, R.color.textColorSecondary))
-                        .textColorPrimaryInverse(ContextCompat.getColor(this, R.color.textColorPrimaryNight))
-                        .textColorSecondaryInverse(ContextCompat.getColor(this, R.color.textColorSecondaryNight))
-                        .apply();
-            } else if (theme == THEME_AMOLED) {
-                Aesthetic.Companion.get()
-                        .isDark(true)
-                        .lightStatusBarMode(AutoSwitchMode.OFF)
-                        .colorPrimary(Color.BLACK)
-                        .colorStatusBar(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ? Color.TRANSPARENT : Color.BLACK)
-                        .colorNavigationBar(Color.BLACK)
-                        .colorAccent(Color.WHITE)
-                        .colorCardViewBackground(Color.BLACK)
-                        .colorWindowBackground(Color.BLACK)
-                        .textColorPrimary(Color.WHITE)
-                        .textColorSecondary(Color.WHITE)
-                        .textColorPrimaryInverse(Color.BLACK)
-                        .textColorSecondaryInverse(Color.BLACK)
-                        .apply();
-            }
-        }
-    }
-
-    /**
-     * Determine if the theme should be a night theme.
-     *
-     * @return          True if the current theme is a night theme.
-     */
-    public boolean isNight() {
-        int time = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        return ((time < getDayStart() || time > getDayEnd()) && getActivityTheme() == THEME_DAY_NIGHT) || getActivityTheme() == THEME_NIGHT;
-    }
-
-    /**
-     * Get the theme to be used for activities and things. Despite
-     * what the name implies, it does not return a theme resource,
-     * but rather one of Alarmio.THEME_DAY_NIGHT, Alarmio.THEME_DAY,
-     * Alarmio.THEME_NIGHT, or Alarmio.THEME_AMOLED.
-     *
-     * @return          The theme to be used for activites.
-     */
-    public int getActivityTheme() {
-        return AlarmPreferenceData.THEME.getValue(this);
-    }
 
     /**
      * Determine if the sunrise/sunset stuff should occur automatically.

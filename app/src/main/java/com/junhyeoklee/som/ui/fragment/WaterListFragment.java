@@ -1,9 +1,13 @@
 package com.junhyeoklee.som.ui.fragment;
 
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.ViewModelProviders;
+
+import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,8 +20,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
+import com.afollestad.aesthetic.Aesthetic;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
 import com.junhyeoklee.som.AppExecutors;
 import com.junhyeoklee.som.data.factory.MainViewModelFactory;
 import com.junhyeoklee.som.ui.view_model.MainViewModel;
@@ -44,11 +53,14 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import me.jfenn.androidutils.DimenUtils;
 
 import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
 
-public class WaterListFragment extends Fragment {
+public class WaterListFragment extends WaterListBasePagerFragment {
     public static final String TAG = WaterListFragment.class.getSimpleName();
     private WaterDatabase mDb;
     private WaterListAdapter mAdapter;
@@ -63,8 +75,8 @@ public class WaterListFragment extends Fragment {
     @BindView(R.id.calendarView)
     MaterialCalendarView mMaterialCalendarView;
 
-    @BindView(R.id.sliding_layout)
-    SlidingUpPanelLayout slidingUpPanelLayout;
+//    @BindView(R.id.sliding_layout)
+//    SlidingUpPanelLayout slidingUpPanelLayout;
 
     @BindView(R.id.tv_total)
     TextView mTv_total;
@@ -72,33 +84,78 @@ public class WaterListFragment extends Fragment {
     private AddWaterDateViewModel viewModel;
     private MainViewModel mainViewModel;
     private List<WaterEntry> mWaterList;
+    private View bottomSheet;
+    private BottomSheetBehavior behavior;
+    private View view;
+    private TabLayout tabLayout;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_drink, container, false);
+        view = inflater.inflate(R.layout.fragment_add_drink, container, false);
         ButterKnife.bind(this, view);
+        bottomSheet = view.findViewById(R.id.bottomSheet);
+        tabLayout = view.findViewById(R.id.tabLayout);
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.title_waters)));
+        behavior = BottomSheetBehavior.from(bottomSheet);
+        behavior.setHideable(false);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+
+                private int statusBarHeight = -1;
+
+                @Override
+                public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                    if (newState == BottomSheetBehavior.STATE_COLLAPSED)
+                        bottomSheet.setPadding(0, 0, 0, 0);
+                    else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                        if (statusBarHeight < 0)
+                            statusBarHeight = DimenUtils.getStatusBarHeight(getContext());
+
+                        bottomSheet.setPadding(0, statusBarHeight, 0, 0);
+                    }
+                }
+
+                @Override
+                public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                    if (statusBarHeight < 0)
+                        statusBarHeight = DimenUtils.getStatusBarHeight(getContext());
+
+                    bottomSheet.setPadding(0, (int) (slideOffset * statusBarHeight), 0, 0);
+                }
+            });
+        }
+        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                behavior.setPeekHeight(view.getMeasuredHeight() / 2);
+                view.findViewById(R.id.calendarContainer).setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, view.getMeasuredHeight() / 2));
+            }
+        });
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mAdapter = new WaterListAdapter(view.getContext());
         mRecyclerView.setAdapter(mAdapter);
         DividerItemDecoration decoration = new DividerItemDecoration(this.getContext(), VERTICAL);
         mRecyclerView.addItemDecoration(decoration);
 
-        slidingUpPanelLayout.setPanelHeight(720);
-        slidingUpPanelLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
-            @Override
-            public void onPanelSlide(View panel, float slideOffset) {
-            }
-
-            @Override
-            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
-                if(newState.name().toString().equalsIgnoreCase("Collapsed")){
-                    //action when collapsed
-                }else if(newState.name().equalsIgnoreCase("Expanded")){
-                    //action when expanded
-                }
-            }
-        });
+//        slidingUpPanelLayout.setPanelHeight(1020);
+//        slidingUpPanelLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+//            @Override
+//            public void onPanelSlide(View panel, float slideOffset) {
+//            }
+//
+//            @Override
+//            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+//                if(newState.name().toString().equalsIgnoreCase("Collapsed")){
+//                    //action when collapsed
+//                }else if(newState.name().equalsIgnoreCase("Expanded")){
+//                    //action when expanded
+//                }
+//            }
+//        });
 
         mDb = WaterDatabase.getInstance(this.getContext());
 
@@ -125,7 +182,6 @@ public class WaterListFragment extends Fragment {
                 result = new String[]{waterEntries.get(i).getDate(),waterEntries.get(i).getDate()};
                 if(result != null){
                     new ApiSimulator(result).executeOnExecutor(newSingleThreadExecutor());
-
                 }
                 String[] result2 = {"2019-03-01","2019-03-02","2019-03-03"};
                 Log.e(TAG,"WATER DATE LIST STATIC = "+" "+result2.toString());
@@ -163,6 +219,7 @@ public class WaterListFragment extends Fragment {
                         int position = viewHolder.getAdapterPosition();
                         List<WaterEntry> tasks = mAdapter.getmWaterEntries();
                         mDb.waterDao().deleteWater(tasks.get(position));
+
                     }
                 });
             }
@@ -181,6 +238,11 @@ public class WaterListFragment extends Fragment {
             }
         }
         mTv_total.setText(String.valueOf(TotalDrinkValue));
+    }
+
+    @Override
+    public String getTitle(Context context) {
+        return context.getString(R.string.title_waters);
     }
 
     // Calendar뷰의 날짜 Decoration Event Class

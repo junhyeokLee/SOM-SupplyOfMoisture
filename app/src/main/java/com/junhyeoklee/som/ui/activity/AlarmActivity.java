@@ -1,8 +1,6 @@
 package com.junhyeoklee.som.ui.activity;
 
-import android.app.AlarmManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,34 +10,26 @@ import android.os.Vibrator;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.afollestad.aesthetic.Aesthetic;
 import com.afollestad.aesthetic.AestheticActivity;
 import com.junhyeoklee.som.Alarmio;
 import com.junhyeoklee.som.R;
 import com.junhyeoklee.som.data.alarm.AlarmData;
 import com.junhyeoklee.som.data.alarm.AlarmPreferenceData;
-import com.junhyeoklee.som.data.alarm.TimerData;
 import com.junhyeoklee.som.util.AlarmFormatUtils;
-import com.junhyeoklee.som.util.AlarmImageUtils;
 
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import me.jfenn.slideactionview.SlideActionListener;
 import me.jfenn.slideactionview.SlideActionView;
 
 public class AlarmActivity extends AestheticActivity implements SlideActionListener {
 
     public static final String EXTRA_ALARM = "james.alarmio.AlarmActivity.EXTRA_ALARM";
-    public static final String EXTRA_TIMER = "james.alarmio.AlarmActivity.EXTRA_TIMER";
 
     private View overlay;
     private TextView date;
@@ -51,7 +41,6 @@ public class AlarmActivity extends AestheticActivity implements SlideActionListe
     private boolean isAlarm;
     private long triggerMillis;
     private AlarmData alarm;
-    private TimerData timer;
     private boolean isVibrate;
 
     private boolean isSlowWake;
@@ -69,6 +58,9 @@ public class AlarmActivity extends AestheticActivity implements SlideActionListe
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getSupportActionBar().hide();
         alarmio = (Alarmio) getApplicationContext();
 
         overlay = findViewById(R.id.overlay);
@@ -76,7 +68,7 @@ public class AlarmActivity extends AestheticActivity implements SlideActionListe
         actionView = findViewById(R.id.slideView);
 
         actionView.setLeftIcon(VectorDrawableCompat.create(getResources(), R.drawable.ic_close, getTheme()));
-        actionView.setRightIcon(VectorDrawableCompat.create(getResources(), R.drawable.water_main, getTheme()));
+        actionView.setRightIcon(VectorDrawableCompat.create(getResources(), R.drawable.ic_check, getTheme()));
         actionView.setListener(this);
 
         isSlowWake = AlarmPreferenceData.SLOW_WAKE_UP.getValue(this);
@@ -86,10 +78,6 @@ public class AlarmActivity extends AestheticActivity implements SlideActionListe
         if (isAlarm) {
             alarm = getIntent().getParcelableExtra(EXTRA_ALARM);
             isVibrate = alarm.isVibrate;
-        }
-        else if(getIntent().hasExtra(EXTRA_TIMER)){
-            timer = getIntent().getParcelableExtra(EXTRA_TIMER);
-            isVibrate = timer.isVibrate;
         }
         else finish();
 
@@ -121,10 +109,8 @@ public class AlarmActivity extends AestheticActivity implements SlideActionListe
         };
         handler.post(runnable);
 
-        com.junhyeoklee.som.services.SleepReminderService.refreshSleepTime(alarmio);
+//        com.junhyeoklee.som.services.SleepReminderService.refreshSleepTime(alarmio);
 
-        if (AlarmPreferenceData.RINGING_BACKGROUND_IMAGE.getValue(this))
-            AlarmImageUtils.getBackgroundImage((ImageView) findViewById(R.id.background));
     }
 
     @Override
@@ -162,46 +148,13 @@ public class AlarmActivity extends AestheticActivity implements SlideActionListe
     public void onSlideLeft() {
         overlay.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
         finish();
-//        final int[] minutes = new int[]{2, 5, 10, 20, 30, 60};
-//        CharSequence[] names = new CharSequence[minutes.length + 1];
-//        for (int i = 0; i < minutes.length; i++) {
-//            names[i] = AlarmFormatUtils.formatUnit(AlarmActivity.this, minutes[i]);
-//        }
-//
-//        names[minutes.length] = getString(R.string.title_snooze_custom);
-//
-//        stopAnnoyingness();
-//        new AlertDialog.Builder(AlarmActivity.this, isDark ? R.style.Theme_AppCompat_Dialog_Alert : R.style.Theme_AppCompat_Light_Dialog_Alert)
-//                .setItems(names, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        if (which < minutes.length) {
-//                            TimerData timer = alarmio.newTimer();
-//                            timer.setDuration(TimeUnit.MINUTES.toMillis(minutes[which]), alarmio);
-//                            timer.setVibrate(AlarmActivity.this, isVibrate);
-//                            timer.set(alarmio, ((AlarmManager) AlarmActivity.this.getSystemService(Context.ALARM_SERVICE)));
-//                            alarmio.onTimerStarted();
-//
-//                            finish();
-//                        }
-//
-//                    }
-//                })
-//                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                    }
-//                })
-//                .show();
-//
-//        overlay.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
     }
 
     @Override
     public void onSlideRight() {
         overlay.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
         Intent lIntetn = new Intent(AlarmActivity.this,MainActivity.class);
+
         startActivity(lIntetn);
         finish();
     }

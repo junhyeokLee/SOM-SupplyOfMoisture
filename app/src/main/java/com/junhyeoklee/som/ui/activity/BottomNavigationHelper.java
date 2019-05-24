@@ -8,7 +8,7 @@ import android.util.Log;
 
 import java.lang.reflect.Field;
 
-class BottomNavigationHelper {
+class  BottomNavigationHelper {
 
     @SuppressLint("RestrictedApi")
     static void disableShiftMode(BottomNavigationView view) {

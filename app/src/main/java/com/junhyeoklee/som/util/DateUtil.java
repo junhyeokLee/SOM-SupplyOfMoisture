@@ -1,7 +1,6 @@
 package com.junhyeoklee.som.util;
 
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.text.style.ForegroundColorSpan;
 
 import com.junhyeoklee.som.ui.fragment.WaterListFragment;
@@ -12,16 +11,14 @@ import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 
 public class DateUtil {
 
-    public final String FORMAT_DATE = "yyyy-MM-dd";
+    public final String dateFormat = "yyyy-MM-dd";
 
 
     public String getFarDay(int far){
@@ -29,7 +26,7 @@ public class DateUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.DAY_OF_MONTH,far);
-        SimpleDateFormat sdf = new SimpleDateFormat(DateUtil.this.FORMAT_DATE);
+        SimpleDateFormat sdf = new SimpleDateFormat(DateUtil.this.dateFormat);
         String currentDateAndTime = sdf.format(calendar.getTime());
         return currentDateAndTime;
     }
@@ -63,8 +60,8 @@ public class DateUtil {
     }
 
     public String getDayNameList(String days){
-      StringBuilder builder = new StringBuilder();
-      if(days.contains("0")) builder.append("일");
+        StringBuilder builder = new StringBuilder();
+        if(days.contains("0")) builder.append("일");
         if(days.contains("1")) builder.append("월");
         if(days.contains("2")) builder.append("화");
         if(days.contains("3")) builder.append("수");
@@ -72,7 +69,7 @@ public class DateUtil {
         if(days.contains("5")) builder.append("금");
         if(days.contains("6")) builder.append("토");
 
-      return builder.toString();
+        return builder.toString();
     }
 
     public String getIndexOfDayName(int index){
@@ -182,6 +179,7 @@ public class DateUtil {
             this.color = color;
             this.dates = new HashSet<>(dates);
         }
+
 
         @Override
         public boolean shouldDecorate(CalendarDay day) {

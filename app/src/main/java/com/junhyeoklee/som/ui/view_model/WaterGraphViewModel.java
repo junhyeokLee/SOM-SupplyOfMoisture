@@ -22,6 +22,10 @@ public class WaterGraphViewModel extends ViewModel {
         return mRepository.getWaterDateMonth(dateMonth);
     }
 
+    public LiveData<List<WaterEntry>> getWater_dateWeek(String dateWeek){
+        return mRepository.getWaterDateWeek(dateWeek);
+    }
+
     @Override
     protected void onCleared() {
         super.onCleared();

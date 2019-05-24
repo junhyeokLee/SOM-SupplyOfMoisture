@@ -18,7 +18,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activity.AlarmActivity2"></activity>
         <activity
             android:name=".ui.activity.MainActivity"
             android:launchMode="singleTop">
@@ -33,10 +32,8 @@
             android:launchMode="singleTask" />
 
         <service android:name=".services.SleepReminderService" />
-        <service android:name=".services.TimerService" />
 
         <receiver android:name=".receivers.AlarmReceiver" />
-        <receiver android:name=".receivers.TimerReceiver" />
     </application>
 
 </manifest>

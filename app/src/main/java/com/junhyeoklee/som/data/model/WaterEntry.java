@@ -19,21 +19,31 @@ public class WaterEntry {
     private int amount;
     @ColumnInfo(name = "date")
     private String date;
-    //그래프 달마다 체크하기 위함
+    //그래프 ~ 년도 1~12월까지 체크
     private String dateMonth;
 
+    // 그래프 ~월 1~31일까지 체크
+    private String dateWeek;
+
+    // 마셨을때의 시간을 체크하기 위함
+    private String dateTime;
+
     @Ignore
-    public WaterEntry(int amount,String date,String dateMonth){
+    public WaterEntry(int amount,String date,String dateMonth,String dateWeek,String dateTime){
         this.amount = amount;
         this.date = date;
         this.dateMonth = dateMonth;
+        this.dateWeek = dateWeek;
+        this.dateTime = dateTime;
     }
 
-    public WaterEntry(int id,int amount,String date,String dateMonth){
+    public WaterEntry(int id,int amount,String date,String dateMonth,String dateWeek,String dateTime){
         this.id = id;
         this.amount = amount;
         this.date = date;
         this.dateMonth = dateMonth;
+        this.dateWeek = dateWeek;
+        this.dateTime = dateTime;
     }
 
 
@@ -61,5 +71,21 @@ public class WaterEntry {
 
     public void setDateMonth(String dateMonth) {
         this.dateMonth = dateMonth;
+    }
+
+    public String getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public String getDateWeek() {
+        return dateWeek;
+    }
+
+    public void setDateWeek(String dateWeek) {
+        this.dateWeek = dateWeek;
     }
 }

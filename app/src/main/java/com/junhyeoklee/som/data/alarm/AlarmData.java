@@ -27,8 +27,8 @@ public class AlarmData implements Parcelable {
     public boolean isVibrate = true;
 
     public AlarmData(int id, Calendar time){
-    this.id = id;
-    this.time = time;
+        this.id = id;
+        this.time = time;
     }
 
     public AlarmData(int id, Context context){
@@ -36,9 +36,9 @@ public class AlarmData implements Parcelable {
         time = Calendar.getInstance();
         time.setTimeInMillis((long) AlarmPreferenceData.ALARM_TIME.getSpecificValue(context,id));
         isEnabled = AlarmPreferenceData.ALARM_ENABLED.getSpecificValue(context,id);
-//        for(int i = 0; i < 7; i++){
-//            days[i] = AlarmPreferenceData.ALARM_DAY_ENABLED.getSpecificValue(context,id,i);
-//        }
+        for(int i = 0; i < 7; i++){
+            days[i] = AlarmPreferenceData.ALARM_DAY_ENABLED.getSpecificValue(context,id,i);
+        }
         isVibrate = AlarmPreferenceData.ALARM_VIBRATE.getSpecificValue(context,id);
 
     }

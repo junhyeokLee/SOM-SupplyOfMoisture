@@ -68,6 +68,38 @@ public class WaterRepository {
         return mWaterDao.loadWaterBydateMonth(dateMonth);
     }
 
+    public LiveData<List<WaterEntry>> getWaterDateWeek(String dateWeek){
+
+        LiveData<List<WaterEntry>> getLoadWaters = mWaterNetworkRoot.getLoadWaterList();
+        getLoadWaters.observeForever(newWatersFromNetwork -> mExcutors.diskIO().execute(() ->{
+            if(newWatersFromNetwork != null){
+                mWaterDao.loadWaterBydateWeek(dateWeek);
+            }
+            else{
+                Log.e("No Response","No Response from network");
+            }
+        }));
+
+        initializedDate();
+        return mWaterDao.loadWaterBydateWeek(dateWeek);
+    }
+
+    public LiveData<List<WaterEntry>> getWaterDateTime(String dateTime){
+
+        LiveData<List<WaterEntry>> getLoadWaters = mWaterNetworkRoot.getLoadWaterList();
+        getLoadWaters.observeForever(newWatersFromNetwork -> mExcutors.diskIO().execute(() ->{
+            if(newWatersFromNetwork != null){
+                mWaterDao.loadWaterBydateTime(dateTime);
+            }
+            else{
+                Log.e("No Response","No Response from network");
+            }
+        }));
+
+        initializedDate();
+        return mWaterDao.loadWaterBydateTime(dateTime);
+    }
+
     private synchronized void initializedDate(){
         if(mInitialized) return;
         mInitialized = true;

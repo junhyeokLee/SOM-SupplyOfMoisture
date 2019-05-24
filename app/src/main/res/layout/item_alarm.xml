@@ -26,6 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
+                android:fontFamily="@font/nanumbarunpenr"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:textColor="?android:textColorSecondary"
@@ -45,11 +46,12 @@
             android:id="@+id/nextTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="6dp"
-            tools:text="Next alarm: 14:00 Friday, January 26"/>
+            android:fontFamily="@font/nanumbarunpenr"
+            android:textSize="12sp"
+            tools:text="Next alarm: 14:00 Friday, January 26" />
 
         <LinearLayout
             android:id="@+id/extra"
@@ -64,6 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
+                android:fontFamily="@font/nanumbarunpenr"
                 android:tag=":aesthetic_ignore"
                 android:text="@string/title_repeat" />
 

@@ -9,16 +9,10 @@ import com.junhyeoklee.som.Alarmio;
 import androidx.annotation.Nullable;
 
 public enum AlarmPreferenceData {
-    THEME(Alarmio.THEME_DAY_NIGHT),
-    BACKGROUND_IMAGE("https://jfenn.me/images/headers/snowytrees.jpg"),
-    RINGING_BACKGROUND_IMAGE(true),
     DAY_AUTO(true),
     DAY_START(6), //hours TODO: change to minutes
     DAY_END(18), //hours
     ALARM_LENGTH(0),
-    TIMER_LENGTH(0),
-    DEFAULT_ALARM_RINGTONE(null),
-    DEFAULT_TIMER_RINGTONE(null),
     SLEEP_REMINDER(true),
     SLEEP_REMINDER_TIME(25200000L), //milliseconds
     SLOW_WAKE_UP(true),
@@ -27,10 +21,6 @@ public enum AlarmPreferenceData {
     ALARM_ENABLED("%d/ALARM_ENABLED", true),
     ALARM_DAY_ENABLED("%1$d/ALARM_DAY/%2$d/ENABLED", false),
     ALARM_VIBRATE("%d/ALARM_VIBRATE", true),
-    TIMER_DURATION("%d/TIMER_DURATION", 600000),
-    TIMER_END_TIME("%d/TIMER_END_TIME", 0),
-    TIMER_VIBRATE("%d/TIMER_VIBRATE", true),
-    TIMER_SOUND("%d/TIMER_SOUND", ""),
     TIME_ZONE_ENABLED("%s/TIME_ZONE_ENABLED", false);
 
     private String name;

@@ -38,6 +38,7 @@
     <color name="timedatepicker_textColorAccent">#FFFFFF</color>
     <color name="timedatepicker_textColorPrimary">#8A000000</color>
     <color name="timedatepicker_textColorSecondary">#64000000</color>
+    <color name="date_daccent">#ED772E</color>
     <string name="timedatepickers_day">Day</string>
     <string name="timedatepickers_hours">Hours</string>
     <string name="timedatepickers_minutes">Minutes</string>

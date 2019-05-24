@@ -10,7 +10,7 @@ import android.util.Log;
 import com.junhyeoklee.som.data.DateConverter;
 import com.junhyeoklee.som.data.model.WaterDao;
 import com.junhyeoklee.som.data.model.WaterEntry;
-@Database(entities = {WaterEntry.class},version = 16, exportSchema = false)
+@Database(entities = {WaterEntry.class},version = 17, exportSchema = false)
 @TypeConverters(DateConverter.class)
 public abstract class WaterDatabase extends RoomDatabase {
     private static final String LOG_TAG = WaterDatabase.class.getSimpleName();
