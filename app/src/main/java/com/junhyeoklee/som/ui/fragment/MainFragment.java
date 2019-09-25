@@ -2,6 +2,9 @@ package com.junhyeoklee.som.ui.fragment;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -33,6 +36,8 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class MainFragment extends Fragment {
     @BindView(R.id.btn_Drinking)
     Button btn_Drinking;
@@ -62,6 +67,7 @@ public class MainFragment extends Fragment {
     private String getTiemMonth = sdfMonth.format(calendarDate);
     private String getTiemWeek = sdfWeek.format(calendarDate);
     private String getDateTime = sdfTime.format(calendarDate);
+
 
     private WaterDatabase mDb;
     public static final String DATE_FORMAT = "yyy/MM/dd";
@@ -130,6 +136,9 @@ public class MainFragment extends Fragment {
     private void populateUI(final List<WaterEntry> waters) {
         int TotalDrinkValue = 0;
         String dispPattern = "0";
+        SharedPreferences pref = this.getActivity().getSharedPreferences("TotalAmount", MODE_PRIVATE);
+        String TotalAmout = pref.getString("totalAmout", "");
+
         final DecimalFormat form = new DecimalFormat(dispPattern);
 
         for (int i = 0; i < waters.size(); i++) {
@@ -137,11 +146,11 @@ public class MainFragment extends Fragment {
                 TotalDrinkValue += waters.get(i).getAmount();
             }
         }
-        final double PercentValue = (double) ((double) TotalDrinkValue / 1500) * 100;
+        final double PercentValue = (double) ((double) TotalDrinkValue / Integer.parseInt(TotalAmout)) * 100;
         Log.e(TAG, "DrinkAmountValue =" + "" + TotalDrinkValue);
 
         tv_DrinkAmount.setText(String.valueOf(TotalDrinkValue));
-        tv_TotalAmout.setText(String.valueOf(1500));
+        tv_TotalAmout.setText(TotalAmout);
         tv_Percentage.setText(form.format(PercentValue));
 
         final int DrinkAmount = Integer.parseInt(tv_Drink.getText().toString());
@@ -170,7 +179,7 @@ public class MainFragment extends Fragment {
 //            }
 //        }).start();
 
-        waveView.setProgress(TotalDrinkValue, 1500);
+        waveView.setProgress(TotalDrinkValue, Integer.parseInt(TotalAmout));
         waveView.bringToFront();
 
     }

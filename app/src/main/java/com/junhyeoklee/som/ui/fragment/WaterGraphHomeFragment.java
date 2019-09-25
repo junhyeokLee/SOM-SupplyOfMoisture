@@ -25,7 +25,6 @@ public class WaterGraphHomeFragment extends WaterGraphBaseFragment {
 
     private View view;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -33,7 +32,7 @@ public class WaterGraphHomeFragment extends WaterGraphBaseFragment {
         ButterKnife.bind(this, view);
 
         WaterSimplePagerAdapter pagerAdapter = new WaterSimplePagerAdapter(getContext(),getChildFragmentManager(),
-                new WaterGraphFragment.Instantiator(getContext()),new WaterGraphWeekFragment.Instantiator(getContext()));
+                new WaterGraphWeekFragment.Instantiator(getContext()),new WaterGraphFragment.Instantiator(getContext()));
 
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager);

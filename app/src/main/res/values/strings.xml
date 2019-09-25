@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SOM</string>
+    <string name="app_name">WaterKeep</string>
     <string name="content_description_water_icon">Water Icon</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_home">메인</string>
@@ -73,8 +73,10 @@
     <string name="desc_sleep_reminder_time">%1$d hours before</string>
     <string name="msg_alarms_empty">알람이 설정되지 않았습니다. + 버튼을 눌러주세요.</string>
     <string name="msg_waters_empty">물을 마셔주세요!</string>
+    <string name="msg_water_graph_year_empty">물을 마신 데이터가 없습니다.</string>
     <string name="msg_water_graph_month_empty">이번달 물을 마신 데이터가 없습니다.</string>
     <string name="msg_water_graph_week_empty">이번주 물을 마신 데이터가 없습니다.</string>
+    <string name="start">GOT IT</string>
 
     <string name="msg_time_zones_selected">%d Selected</string>
     <string name="msg_sleep_reminder">Your next alarm will ring approximately %s from now. To get your specified amount of sleep in the settings menu, you should go to bed now.</string>

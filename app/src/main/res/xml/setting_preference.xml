@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="start">
+
+    <PreferenceCategory
+        android:title="환경설정"
+        app:iconSpaceReserved="false"
+        >
+
+        <EditTextPreference
+            android:key="keyword_screen"
+            android:summary="목표량을 설정해 주세요."
+            android:title="목표설정" />
+
+        <PreferenceScreen
+            android:key="keyword"
+            android:summary="junhyeoklee616@gmail.com"
+            android:title="문의사항" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

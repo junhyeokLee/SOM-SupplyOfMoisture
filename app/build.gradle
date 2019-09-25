@@ -69,6 +69,7 @@ dependencies {
     implementation "com.google.guava:guava:$rootProject.guavaVersion"
     implementation "androidx.room:room-runtime:$rootProject.room_v"
     implementation 'com.prolificinteractive:material-calendarview:1.4.3'
+    implementation 'com.android.support:preference-v7:28.0.0'
 
     // MPAndroid chart Library
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'

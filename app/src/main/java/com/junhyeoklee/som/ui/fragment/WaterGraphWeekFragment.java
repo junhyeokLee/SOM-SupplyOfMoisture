@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,16 +16,21 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.junhyeoklee.som.R;
 import com.junhyeoklee.som.data.database.WaterDatabase;
 import com.junhyeoklee.som.data.factory.MainViewModelFactory;
@@ -58,11 +64,23 @@ public class WaterGraphWeekFragment extends WaterGraphBasePagerFragment implemen
     ImageButton mBtn_leftArrow;
     @BindView(R.id.btn_right_arrow)
     ImageButton mBtn_rightArrow;
+    @BindView(R.id.empty)
+    LinearLayout mEmptyLayout;
+    @BindView(R.id.tv_average)
+    TextView mTv_Average;
+    @BindView(R.id.tv_day_select_amout)
+    TextView mTv_DaySelectAmout;
+    @BindView(R.id.tv_total_amount)
+    TextView mTv_TotalAmout;
+    @BindView(R.id.tv_select_day)
+    TextView mTv_SelectDay;
 
     private WaterDatabase mDb;
     private MainViewModel mainViewModel;
     private WaterGraphViewModel viewModel;
     private float mAmount;
+    private int mTotalDrinkAmount;
+    private int mAverageValue;
 
     private LineChart mChart;
 
@@ -75,12 +93,15 @@ public class WaterGraphWeekFragment extends WaterGraphBasePagerFragment implemen
 
     private int dateCount = 0;
 
+    private String StartDate = null;
+    private String EndDate = null;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_water_week_graph,container,false);
+        ((TextView) view.findViewById(R.id.emptyText)).setText(R.string.msg_water_graph_week_empty);
         mChart = (LineChart) view.findViewById(R.id.linechart);
         ButterKnife.bind(this, view);
         mDb = WaterDatabase.getInstance(this.getContext());
@@ -91,41 +112,25 @@ public class WaterGraphWeekFragment extends WaterGraphBasePagerFragment implemen
 
     private void initLineChart(){
 
-//        ArrayList<String> labels = new ArrayList<String>();
-//        labels.add("일");
-//        labels.add("월");
-//        labels.add("화");
-//        labels.add("수");
-//        labels.add("목");
-//        labels.add("금");
-//        labels.add("토");
-
         mChart.getDescription().setEnabled(false);
         mChart.setPinchZoom(false);
         mChart.setDrawGridBackground(false);
         mChart.getAxisLeft().setDrawGridLines(false);
         mChart.animateY(1000);
         mChart.getLegend().setEnabled(false);
-
+        mChart.setExtraBottomOffset(30f);
         ValueFormatter custom = new MyValueFormatter2();
-        final String[] quarters = new String[] { "Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7" };
-        ArrayList<String> labels = new ArrayList<String>();
-        labels.add("일");
-        labels.add("월");
-        labels.add("화");
-        labels.add("수");
-        labels.add("목");
-        labels.add("금");
-        labels.add("토");
-
+        final String[] quarters = new String[] { "일", "월", "화", "수", "목", "금", "토" };
 
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setGranularityEnabled(true);
         xAxis.setGranularity(1f);
         xAxis.setDrawGridLines(false);
-        xAxis.setTextSize(10);
+        xAxis.setTextSize(14);
         xAxis.setLabelCount(7);
+        xAxis.setYOffset(10);
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(quarters));
 
         ValueFormatter custom2 = new MyValueFormatter(" ml");
 
@@ -134,6 +139,8 @@ public class WaterGraphWeekFragment extends WaterGraphBasePagerFragment implemen
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         leftAxis.setSpaceTop(15f);
         leftAxis.setAxisMinimum(0f);
+        leftAxis.setXOffset(10);
+        leftAxis.setTextSize(11);
 
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setDrawLabels(false);
@@ -141,7 +148,7 @@ public class WaterGraphWeekFragment extends WaterGraphBasePagerFragment implemen
         rightAxis.setValueFormatter(custom2);
         rightAxis.setSpaceTop(15f);
         rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
-
+        rightAxis.setXOffset(10);
 
         MainViewModelFactory mainFactory = new MainViewModelFactory(mDb);
         mainViewModel = ViewModelProviders.of(this, mainFactory).get(MainViewModel.class);
@@ -154,62 +161,179 @@ public class WaterGraphWeekFragment extends WaterGraphBasePagerFragment implemen
 
         mDateMonthStart.setTextColor(getResources().getColor(R.color.date_daccent));
         mDateMonthEnd.setTextColor(getResources().getColor(R.color.date_daccent));
-
         // 첫째주
         cal.set(Calendar.DAY_OF_WEEK, 1);
-        int year1 = cal.get(Calendar.YEAR);
-        int month1 = cal.get(Calendar.MONTH)+1;
-        int day1 = cal.get(Calendar.DAY_OF_MONTH);
-//        cal.add(cal.DATE, -7); // 7일(일주일)을 뺀다
-        String StartDate = ""+year1+month1+day1;
-        String StartDate2 = format.format(cal.getTime());
-
-        mDateMonthStart.setText(StartDate2);
+        StartDate = format.format(cal.getTime());
+        mDateMonthStart.setText(StartDate);
 
         // 마지막주
         cal.set(Calendar.DAY_OF_WEEK, 7);
-        int year7 = cal.get(Calendar.YEAR);
-        int month7 = cal.get(Calendar.MONTH)+1;
-        int day7 = cal.get(Calendar.DAY_OF_MONTH);
-        String getWeeksTime = ""+year7+month7+day7;
-        String getWeeksTime2 = format.format(cal.getTime());
-        Log.e("이번주 마지막 날자 = ",getWeeksTime2);
-//        String getWeeksTime = sdfWeek.format(graphDate);
+        EndDate = format.format(cal.getTime());
+        mDateMonthEnd.setText(EndDate);
+        String getCurrentTime = format.format(graphDate);
 
-        mDateMonthEnd.setText(getWeeksTime2);
 
-        // 올해 년도
-        String getYearTime = sdfyear.format(graphDate);
+        // 눌렀을때 전주로 이동
+        mBtn_leftArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cal.set(Calendar.DAY_OF_WEEK, 1);
+                StartDate = format.format(cal.getTime());
+                cal.add(Calendar.DATE,-7);
+                StartDate = format.format(cal.getTime());
+                mDateMonthStart.setText(StartDate);
 
-//        mBtn_leftArrow.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String getWeeksTime = format.format(cal.getTime());
-//                mDateMonthEnd.setText(getWeeksTime);
-//
-//                cal.add(cal.DATE, -7); // 7일(이주일)을 뺀다
-//                String StartDate = format.format(cal.getTime());
-//                mDateMonthStart.setText(StartDate);
-//
-//            }
-//        });
-//
-//        mBtn_rightArrow.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String StartDate = format.format(cal.getTime());
-//                mDateMonthStart.setText(StartDate);
-//
-//                cal.add(cal.DATE, +7); // 7일(이주일)을 더한다
-//                String getWeeksTime = format.format(cal.getTime());
-//                mDateMonthEnd.setText(getWeeksTime);
-//            }
-//        });
-        int endDt = Integer.parseInt(getWeeksTime2);
-        int startYear = Integer.parseInt(StartDate2.substring(0, 4));
-        int startMonth = Integer.parseInt(StartDate2.substring(4, 6));
-        int startDate = Integer.parseInt(StartDate2.substring(6, 8));
+                cal.set(Calendar.DAY_OF_WEEK,7);
+                EndDate = format.format(cal.getTime());
+                mDateMonthEnd.setText(EndDate);
 
+                int endDt = Integer.parseInt(EndDate);
+                int startYear = Integer.parseInt(StartDate.substring(0, 4));
+                int startMonth = Integer.parseInt(StartDate.substring(4, 6));
+                int startDate = Integer.parseInt(StartDate.substring(6, 8));
+                Calendar cal = Calendar.getInstance();
+                // Calendar의 Month는 0부터 시작하므로 -1 해준다.
+                // Calendar의 기본 날짜를 startDt로 셋팅해준다.
+                cal.set(startYear, startMonth - 1, startDate);
+
+                ArrayList<Entry> yVals = new ArrayList<Entry>();
+                WaterGraphViewModelFactory factory = InjectorUtils.provideWaterGraphViewModelFactory(getContext());
+                viewModel = ViewModelProviders.of(WaterGraphWeekFragment.this, factory).get(WaterGraphViewModel.class);
+                mTotalDrinkAmount = 0;
+                mAverageValue = 0;
+                int i = 0;
+                while (true) {
+                    // 날짜 출력
+                    final int finali = i;
+                    i++;
+                    System.out.println(getDateByString(cal.getTime()));
+                    Log.e("DATE WEEKS TIME = ", getDateByString(cal.getTime()));
+                    String date = getDateByString(cal.getTime());
+
+                    viewModel.getWater_dateWeek(getDateByString(cal.getTime()).replaceAll("-","")).observe(WaterGraphWeekFragment.this, waterEntries -> {
+//                mWaterEntryList = waterEntries;
+                        mAmount = getTotalDrinkValue(waterEntries);
+                        if (mAmount != 0) {
+                            yVals.add(new Entry(finali, mAmount));
+                            mAverageValue ++; // 물을 마신 날에만 값을 증가시켜 평균값을 내기 위함
+                            // 총 섭취량
+                            mTotalDrinkAmount += mAmount;
+                            mTv_TotalAmout.setText(""+ mTotalDrinkAmount +" ml");
+
+                            // 주 평균 섭취량
+                            mTv_Average.setText("" + mTotalDrinkAmount / mAverageValue+ " ml");
+                        } else {
+                            yVals.add(new Entry(finali, 0));
+                        }
+                        initLineDataSet(yVals);
+                    });
+                    // Calendar의 날짜를 하루씩 증가한다.
+                    cal.add(Calendar.DATE, 1); // one day increment
+                    // 현재 날짜가 종료일자보다 크면 종료
+                    if (getDateByInteger(cal.getTime()) > endDt) break;
+
+                    if(Integer.parseInt(getCurrentTime) < Integer.parseInt(EndDate)){
+                        mBtn_rightArrow.setVisibility(View.INVISIBLE);
+                    } else mBtn_rightArrow.setVisibility(View.VISIBLE);
+
+                    // 마신 그래프가 없을때 물을 마신데이터가 없다고 알려줌.
+                    if(mAmount == 0){
+                        mEmptyLayout.setVisibility(View.VISIBLE);
+                        mChart.setVisibility(View.GONE);
+                    }else{
+                        mEmptyLayout.setVisibility(View.GONE);
+                        mChart.setVisibility(View.VISIBLE);
+                    }
+
+                    mChart.animateY(1000);
+
+                }
+            }
+        });
+
+        // 눌렀을때 다음주로 이동
+        mBtn_rightArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                cal.set(Calendar.DAY_OF_WEEK, 1);
+                StartDate = format.format(cal.getTime());
+                cal.add(Calendar.DATE,+7);
+                StartDate = format.format(cal.getTime());
+                mDateMonthStart.setText(StartDate);
+
+                cal.set(Calendar.DAY_OF_WEEK,7);
+                EndDate = format.format(cal.getTime());
+                mDateMonthEnd.setText(EndDate);
+
+                int endDt = Integer.parseInt(EndDate);
+                int startYear = Integer.parseInt(StartDate.substring(0, 4));
+                int startMonth = Integer.parseInt(StartDate.substring(4, 6));
+                int startDate = Integer.parseInt(StartDate.substring(6, 8));
+                Calendar cal = Calendar.getInstance();
+                // Calendar의 Month는 0부터 시작하므로 -1 해준다.
+                // Calendar의 기본 날짜를 startDt로 셋팅해준다.
+                cal.set(startYear, startMonth - 1, startDate);
+
+                ArrayList<Entry> yVals = new ArrayList<Entry>();
+                WaterGraphViewModelFactory factory = InjectorUtils.provideWaterGraphViewModelFactory(getContext());
+                viewModel = ViewModelProviders.of(WaterGraphWeekFragment.this, factory).get(WaterGraphViewModel.class);
+                mTotalDrinkAmount = 0;
+                mAverageValue = 0;
+                int i = 0;
+                while (true) {
+                    // 날짜 출력
+                    final int finali = i;
+                    i++;
+                    System.out.println(getDateByString(cal.getTime()));
+                    Log.e("DATE WEEKS TIME = ", getDateByString(cal.getTime()));
+                    String date = getDateByString(cal.getTime());
+
+                    viewModel.getWater_dateWeek(getDateByString(cal.getTime()).replaceAll("-","")).observe(WaterGraphWeekFragment.this, waterEntries -> {
+//                mWaterEntryList = waterEntries;
+                        mAmount = getTotalDrinkValue(waterEntries);
+                        if (mAmount != 0) {
+                            yVals.add(new Entry(finali, mAmount));
+                            mAverageValue ++; // 물을 마신 날에만 값을 증가시켜 평균값을 내기 위함
+                            // 총 섭취량
+                            mTotalDrinkAmount += mAmount;
+                            mTv_TotalAmout.setText(""+ mTotalDrinkAmount +" ml");
+
+                            // 주 평균 섭취량
+                            mTv_Average.setText("" + mTotalDrinkAmount / mAverageValue+ " ml");
+                        } else {
+                            yVals.add(new Entry(finali, 0));
+                        }
+                        initLineDataSet(yVals);
+                    });
+                    // Calendar의 날짜를 하루씩 증가한다.
+                    cal.add(Calendar.DATE, 1); // one day increment
+                    // 현재 날짜가 종료일자보다 크면 종료
+                    if (getDateByInteger(cal.getTime()) > endDt) break;
+
+                    if(Integer.parseInt(getCurrentTime) < Integer.parseInt(EndDate)){
+                        mBtn_rightArrow.setVisibility(View.INVISIBLE);
+                    } else mBtn_rightArrow.setVisibility(View.VISIBLE);
+
+                    // 마신 그래프가 없을때 물을 마신데이터가 없다고 알려줌.
+                    if(mAmount == 0){
+                        mEmptyLayout.setVisibility(View.VISIBLE);
+                        mChart.setVisibility(View.GONE);
+                    }else{
+                        mEmptyLayout.setVisibility(View.GONE);
+                        mChart.setVisibility(View.VISIBLE);
+                    }
+
+                    mChart.animateY(1000);
+                }
+            }
+        });
+
+
+        int endDt = Integer.parseInt(EndDate);
+        int startYear = Integer.parseInt(StartDate.substring(0, 4));
+        int startMonth = Integer.parseInt(StartDate.substring(4, 6));
+        int startDate = Integer.parseInt(StartDate.substring(6, 8));
         Calendar cal = Calendar.getInstance();
         // Calendar의 Month는 0부터 시작하므로 -1 해준다.
         // Calendar의 기본 날짜를 startDt로 셋팅해준다.
@@ -219,34 +343,52 @@ public class WaterGraphWeekFragment extends WaterGraphBasePagerFragment implemen
 
         WaterGraphViewModelFactory factory = InjectorUtils.provideWaterGraphViewModelFactory(getContext());
         viewModel = ViewModelProviders.of(this, factory).get(WaterGraphViewModel.class);
+        mTotalDrinkAmount = 0;
+        mAverageValue = 0;
+        int i = 0;
+        while (true) {
+            // 날짜 출력
+            final int finali = i;
+            i++;
+            System.out.println(getDateByString(cal.getTime()));
+            Log.e("DATE WEEKS TIME = ", getDateByString(cal.getTime()));
+            String date = getDateByString(cal.getTime());
 
-            while (true) {
-                // 날짜 출력
-                System.out.println(getDateByString(cal.getTime()));
-                Log.e("DATE WEEKS TIME = ", getDateByString(cal.getTime()));
-                String date = getDateByString(cal.getTime());
-
-                viewModel.getWater_dateWeek(getDateByString(cal.getTime()).replaceAll("-","")).observe(this, waterEntries -> {
+            viewModel.getWater_dateWeek(getDateByString(cal.getTime()).replaceAll("-","")).observe(this, waterEntries -> {
 //                mWaterEntryList = waterEntries;
-                    mAmount = getTotalDrinkValue(waterEntries);
-                    if (mAmount != 0) {
-                    yVals.add(new Entry(Integer.parseInt(date.replace("-","").replace(getYearTime,"")), mAmount));
-//                    yVals.add(new Entry(finalI, mAmount));
-                    } else {
-                    yVals.add(new Entry(Integer.parseInt(date.replace("-","").replace(getYearTime,"")), 0));
-                    }
-//                    yVals.add(new Entry(Integer.parseInt(date.replaceAll("-","")), mAmount));
-//                    yVals.add(new Entry(Integer.parseInt(date.replaceAll("-","")), mAmount));
-                    initLineDataSet(yVals);
-                });
-                // Calendar의 날짜를 하루씩 증가한다.
-                cal.add(Calendar.DATE, 1); // one day increment
+                mAmount = getTotalDrinkValue(waterEntries);
+                if (mAmount != 0) {
+                    yVals.add(new Entry(finali, mAmount));
+                    mAverageValue ++; // 물을 마신 날에만 값을 증가시켜 평균값을 내기 위함
+                    // 총 섭취량
+                    mTotalDrinkAmount += mAmount;
+                    mTv_TotalAmout.setText(""+ mTotalDrinkAmount +" ml");
 
-                // 현재 날짜가 종료일자보다 크면 종료
-                if (getDateByInteger(cal.getTime()) > endDt) break;
+                    // 주 평균 섭취량
+                    mTv_Average.setText("" + mTotalDrinkAmount / mAverageValue+ " ml");
+                } else {
+                    yVals.add(new Entry(finali, 0));
+                }
+                initLineDataSet(yVals);
+            });
+            // Calendar의 날짜를 하루씩 증가한다.
+            cal.add(Calendar.DATE, 1); // one day increment
+            // 현재 날짜가 종료일자보다 크면 종료
+            if (getDateByInteger(cal.getTime()) > endDt) break;
 
+            if(Integer.parseInt(getCurrentTime) < Integer.parseInt(EndDate)){
+                mBtn_rightArrow.setVisibility(View.INVISIBLE);
+            } else mBtn_rightArrow.setVisibility(View.VISIBLE);
+
+            // 마신 그래프가 없을때 물을 마신데이터가 없다고 알려줌.
+            if(mAmount == 0){
+                mEmptyLayout.setVisibility(View.VISIBLE);
+                mChart.setVisibility(View.GONE);
+            }else{
+                mEmptyLayout.setVisibility(View.GONE);
+                mChart.setVisibility(View.VISIBLE);
             }
-
+        }
     }
 
     private float getTotalDrinkValue(final List<WaterEntry> waters){
@@ -255,26 +397,25 @@ public class WaterGraphWeekFragment extends WaterGraphBasePagerFragment implemen
         for (int i = 0; i < waters.size(); i++) {
             if(waters != null){
                 TotalDrinkValue += waters.get(i).getAmount();
+                mEmptyLayout.setVisibility(View.GONE);
+                mChart.setVisibility(View.VISIBLE);
+            }
+            else{
+                mEmptyLayout.setVisibility(View.VISIBLE);
+                mChart.setVisibility(View.GONE);
             }
         }
         return TotalDrinkValue;
     }
 
     private void initLineDataSet(ArrayList<Entry> yVals ){
-        ArrayList<String> labels = new ArrayList<String>();
-        labels.add("일");
-        labels.add("월");
-        labels.add("화");
-        labels.add("수");
-        labels.add("목");
-        labels.add("금");
-        labels.add("토");
 
         LineDataSet set1;
         if(mChart.getData() != null &&
-        mChart.getData().getDataSetCount() > 0){
+                mChart.getData().getDataSetCount() > 0){
             set1 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
             set1.setValues(yVals);
+            set1.setValueTextSize(12);
             mChart.getData().notifyDataChanged();
             mChart.notifyDataSetChanged();
         }
@@ -282,6 +423,7 @@ public class WaterGraphWeekFragment extends WaterGraphBasePagerFragment implemen
             set1 = new LineDataSet(yVals,"data Set");
             set1.setDrawValues(false);
             set1.setForm(Legend.LegendForm.EMPTY);
+            set1.setValueTextSize(20);
             set1.setFillAlpha(50);
             set1.setFillColor(getResources().getColor(R.color.sky2));
             set1.setDrawFilled(true);
@@ -303,6 +445,24 @@ public class WaterGraphWeekFragment extends WaterGraphBasePagerFragment implemen
             mChart.setDrawGridBackground(false);
             mChart.setData(data);
         }
+        mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                XAxis xAxis = mChart.getXAxis();
+                float x = e.getX();
+
+                Log.e("차트클릭 y 값",""+(int)x);
+                Log.e("차트클릭 d 값",""+xAxis.getFormattedLabel((int)x));
+
+                mTv_SelectDay.setText(""+xAxis.getFormattedLabel((int)x)+" 요일" );
+                mTv_DaySelectAmout.setText(""+(int)e.getY()+" ml");
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
         mChart.invalidate();
     }
 
@@ -400,5 +560,4 @@ public class WaterGraphWeekFragment extends WaterGraphBasePagerFragment implemen
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.format(date);
     }
-
 }

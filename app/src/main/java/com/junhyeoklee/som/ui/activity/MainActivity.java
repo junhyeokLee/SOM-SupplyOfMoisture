@@ -12,6 +12,8 @@ import com.junhyeoklee.som.R;
 import com.junhyeoklee.som.ui.fragment.AlarmBaseFragment;
 import com.junhyeoklee.som.ui.fragment.AlarmHomeFragment;
 import com.junhyeoklee.som.ui.fragment.MainFragment;
+import com.junhyeoklee.som.ui.fragment.PreferenceFragment;
+import com.junhyeoklee.som.ui.fragment.PreferenceSetting;
 import com.junhyeoklee.som.ui.fragment.SplashFragment;
 import com.junhyeoklee.som.ui.fragment.WaterGraphFragment;
 import com.junhyeoklee.som.ui.fragment.WaterGraphHomeFragment;
@@ -54,6 +56,7 @@ public class MainActivity extends AestheticActivity implements FragmentManager.O
                     break;
 
                 case R.id.navigation_person:
+                    fragment = new PreferenceSetting();
                     break;
             }
             return loadFragment(fragment);
@@ -66,6 +69,7 @@ public class MainActivity extends AestheticActivity implements FragmentManager.O
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
+
         alarmio = (Alarmio) getApplicationContext();
         alarmio.setListener(this);
 
