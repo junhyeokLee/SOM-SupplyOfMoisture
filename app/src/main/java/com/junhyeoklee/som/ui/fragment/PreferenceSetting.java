@@ -33,9 +33,9 @@ public class PreferenceSetting extends PreferenceFragmentCompat implements Share
         SharedPreferences pref = this.getActivity().getSharedPreferences("TotalAmount", MODE_PRIVATE);
         String value = pref.getString("totalAmout", "");
         if (value == "" || value == null) {
-            exercisesPref.setSummary("1500");
+            exercisesPref.setSummary("1500"+" ml");
         } else {
-            exercisesPref.setSummary(value);
+            exercisesPref.setSummary(value+" ml");
         }
     }
 
@@ -66,7 +66,7 @@ public class PreferenceSetting extends PreferenceFragmentCompat implements Share
             if (exercisesPref.getSummary() == "") {
                 exercisesPref.setSummary("목표량을 설정해 주세요.");
             }
-            exercisesPref.setSummary(sharedPreferences.getString(s, ""));
+            exercisesPref.setSummary(sharedPreferences.getString(s, "")+" ml");
             SharedPreferences prefs = this.getActivity().getSharedPreferences("TotalAmount", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("totalAmout", sharedPreferences.getString(s, ""));

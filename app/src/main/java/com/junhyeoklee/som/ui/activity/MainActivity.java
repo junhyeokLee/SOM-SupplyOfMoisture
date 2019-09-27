@@ -1,11 +1,14 @@
 package com.junhyeoklee.som.ui.activity;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.afollestad.aesthetic.AestheticActivity;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.junhyeoklee.som.Alarmio;
 import com.junhyeoklee.som.R;

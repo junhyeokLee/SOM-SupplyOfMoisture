@@ -4,26 +4,31 @@
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/water_main"
+        android:iconTint="@color/blue"
         android:title="@string/title_home" />
 
     <item
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/alarm_clock"
+        android:iconTint="@color/blue"
         android:title="@string/title_notifications" />
 
     <item
         android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/water_list"
+        android:icon="@drawable/calendar"
+        android:iconTint="@color/blue"
         android:title="@string/title_dashboard" />
 
     <item
         android:id="@+id/navigation_chart"
         android:icon="@drawable/graph"
+        android:iconTint="@color/blue"
         android:title="@string/title_chart" />
 
     <item
         android:id="@+id/navigation_person"
-        android:icon="@drawable/person"
+        android:icon="@drawable/preference"
+        android:iconTint="@color/blue"
         android:title="@string/title_impormation" />
 
 </menu>

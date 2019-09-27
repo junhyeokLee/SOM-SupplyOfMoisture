@@ -4,8 +4,8 @@
     <!--시크바 배경-->
     <item android:id="@android:id/background">
         <shape xmlns:android="http://schemas.android.com/apk/res/android" >
-            <corners android:radius="6dp"/>
-            <stroke android:width="6dp" android:color="#D9E5FF" />
+            <corners android:radius="12dp"/>
+            <stroke android:width="1dp" android:color="@color/blue" />
         </shape>
     </item>
 
@@ -13,8 +13,8 @@
     <item android:id="@android:id/secondaryProgress">
         <clip>
             <shape xmlns:android="http://schemas.android.com/apk/res/android" >
-            <corners android:radius="6dp"/>
-                <stroke android:width="6dp" android:color="#B2CCFF" />
+                <corners android:radius="12dp"/>
+                <stroke android:width="1dp" android:color="@color/blue" />
             </shape>
         </clip>
     </item>
@@ -23,8 +23,8 @@
     <item android:id="@android:id/progress" >
         <clip>
             <shape xmlns:android="http://schemas.android.com/apk/res/android" >
-            <corners android:radius="6dp"/>
-                <stroke android:width="6dp" android:color="#6799FF" />
+                <corners android:radius="12dp"/>
+                <stroke android:width="1dp" android:color="@color/blue" />
             </shape>
         </clip>
     </item>

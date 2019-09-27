@@ -25,16 +25,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="sans-serif"
+            android:fontFamily="@font/nanumsquareroundb"
             android:gravity="right"
             android:text="2019-05-16"
-            android:textColor="@color/date_daccent"
+            android:textColor="@color/blue"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/nanumsquareroundb"
             android:text=" ~ "
             android:textColor="@color/blue"
             android:textSize="24sp" />
@@ -44,10 +45,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="sans-serif"
+            android:fontFamily="@font/nanumsquareroundb"
             android:gravity="left"
             android:text="2019-05-23"
-            android:textColor="@color/date_daccent"
+            android:textColor="@color/blue"
+            android:textColorHighlight="@color/blue"
+            android:textColorHint="@color/blue"
+            android:textColorLink="@color/blue"
             android:textSize="20sp" />
 
         <ImageButton
@@ -62,7 +66,8 @@
         android:id="@+id/linechart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.6">
+        android:layout_weight="0.6"
+        android:background="@android:color/white">
 
     </com.github.mikephil.charting.charts.LineChart>
 
@@ -71,6 +76,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:background="@android:color/white"
+        android:backgroundTint="@android:color/white"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone">
@@ -83,28 +90,32 @@
             android:orientation="vertical"
             android:paddingBottom="64dp">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:paddingLeft="32dp"
-                android:paddingRight="32dp"
-                android:scaleType="centerInside"
-                app:srcCompat="@drawable/state_empty" />
-
             <TextView
                 android:id="@+id/emptyText"
-                tools:text="Go do something..."
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="16dp"
+                android:fontFamily="@font/nanumsquareroundl"
                 android:gravity="center"
                 android:textAlignment="center"
-                android:textColor="?android:textColorSecondary"
-                android:textSize="18sp" />
+                android:textColor="@color/blue"
+                android:textColorHighlight="@color/blue"
+                android:textColorHint="@color/blue"
+                android:textSize="18sp"
+                tools:text="Go do something..." />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/empty_water" />
 
         </LinearLayout>
 
@@ -114,7 +125,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="horizontal" >
+        android:background="@android:color/white"
+        android:backgroundTint="@android:color/white"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -128,18 +141,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/nanumsquareroundb"
                 android:gravity="center"
                 android:text="총 섭취량"
-                android:textSize="16sp" />
+                android:textColor="@color/blue"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_total_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/nanumsquareroundl"
                 android:gravity="center|top"
                 android:text="0 L"
-                android:textSize="14sp" />
+                android:textColor="@color/blue"
+                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -154,18 +171,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/nanumsquareroundb"
                 android:gravity="center"
                 android:text="평균 섭취량"
-                android:textSize="16sp" />
+                android:textColor="@color/blue"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_average"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/nanumsquareroundl"
                 android:gravity="center|top"
                 android:text="0 L"
-                android:textSize="14sp" />
+                android:textColor="@color/blue"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -179,18 +200,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/nanumsquareroundb"
                 android:gravity="center"
                 android:text="선택 요일"
-                android:textSize="16sp" />
+                android:textColor="@color/blue"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_day_select_amout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/nanumsquareroundl"
                 android:gravity="center|top"
                 android:text="0 L"
-                android:textSize="14sp" />
+                android:textColor="@color/blue"
+                android:textSize="18sp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -9,7 +9,7 @@
         android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/blue"
+        android:background="@color/sky"
         android:scaleType="centerCrop" />
 
     <View
@@ -35,11 +35,11 @@
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nanumbarunpenr"
+                android:fontFamily="@font/nanumsquareroundb"
                 android:gravity="center"
                 android:text="June 14 2017, 3:49 PM"
                 android:textAlignment="center"
-                android:textColor="?android:textColorPrimary"
+                android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -47,10 +47,10 @@
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nanumbarunpenr"
+                android:fontFamily="@font/nanumsquareroundb"
                 android:gravity="center"
                 android:text="물 마실 시간입니다."
-                android:textColor="?android:textColorPrimary"
+                android:textColor="@android:color/white"
                 android:textSize="36sp" />
 
         </LinearLayout>
@@ -58,7 +58,8 @@
         <com.junhyeoklee.som.ui.view.AestheticSlideActionView
             android:id="@+id/slideView"
             android:layout_width="match_parent"
-            android:layout_height="96dp" />
+            android:layout_height="96dp"
+            android:background="@android:color/white" />
 
     </LinearLayout>
 

@@ -11,7 +11,7 @@
         <EditTextPreference
             android:key="keyword_screen"
             android:summary="목표량을 설정해 주세요."
-            android:title="목표설정" />
+            android:title="목표설정(ml)" />
 
         <PreferenceScreen
             android:key="keyword"

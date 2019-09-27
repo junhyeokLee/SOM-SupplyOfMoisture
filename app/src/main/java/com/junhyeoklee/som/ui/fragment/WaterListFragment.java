@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -16,11 +17,13 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.ItemTouchHelper;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.aesthetic.Aesthetic;
@@ -75,9 +78,10 @@ public class WaterListFragment extends WaterListBasePagerFragment {
     @BindView(R.id.calendarView)
     MaterialCalendarView mMaterialCalendarView;
 
-//    @BindView(R.id.sliding_layout)
+    //    @BindView(R.id.sliding_layout)
 //    SlidingUpPanelLayout slidingUpPanelLayout;
-
+    @BindView(R.id.empty)
+    LinearLayout mEmptyLayout;
     @BindView(R.id.tv_total)
     TextView mTv_total;
 
@@ -94,6 +98,7 @@ public class WaterListFragment extends WaterListBasePagerFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_add_drink, container, false);
         ButterKnife.bind(this, view);
+        ((TextView) view.findViewById(R.id.emptyText)).setText(R.string.msg_water_graph_daily_empty);
         bottomSheet = view.findViewById(R.id.bottomSheet);
         tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.title_waters)));
@@ -176,16 +181,16 @@ public class WaterListFragment extends WaterListBasePagerFragment {
         // 물을 마셨던 모든 날짜들 Decoration 이벤트 주기
         MainViewModelFactory mainFactory = new MainViewModelFactory(mDb);
         mainViewModel = ViewModelProviders.of(this, mainFactory).get(MainViewModel.class);
-        mainViewModel.getWaters().observe(this,waterEntries -> {
+        mainViewModel.getWaters().observe(this, waterEntries -> {
             String[] result;
-            for(int i = 0 ; i < waterEntries.size() ; i++){
-                result = new String[]{waterEntries.get(i).getDate(),waterEntries.get(i).getDate()};
-                if(result != null){
+            for (int i = 0; i < waterEntries.size(); i++) {
+                result = new String[]{waterEntries.get(i).getDate(), waterEntries.get(i).getDate()};
+                if (result != null) {
                     new ApiSimulator(result).executeOnExecutor(newSingleThreadExecutor());
                 }
-                String[] result2 = {"2019-03-01","2019-03-02","2019-03-03"};
-                Log.e(TAG,"WATER DATE LIST STATIC = "+" "+result2.toString());
-                Log.e(TAG,"WATER DATE LIST = "+" "+result.toString());
+                String[] result2 = {"2019-03-01", "2019-03-02", "2019-03-03"};
+                Log.e(TAG, "WATER DATE LIST STATIC = " + " " + result2.toString());
+                Log.e(TAG, "WATER DATE LIST = " + " " + result.toString());
             }
         });
 
@@ -233,10 +238,20 @@ public class WaterListFragment extends WaterListBasePagerFragment {
         final DecimalFormat form = new DecimalFormat(dispPattern);
 
         for (int i = 0; i < waters.size(); i++) {
-            if(waters != null){
+            if (waters != null) {
                 TotalDrinkValue += waters.get(i).getAmount();
             }
         }
+
+        if(TotalDrinkValue == 0){
+            // 물을 마신데이터가 없다고 알려줌.
+            mEmptyLayout.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+        }else{
+            mEmptyLayout.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+        }
+
         mTv_total.setText(String.valueOf(TotalDrinkValue));
     }
 
@@ -249,15 +264,15 @@ public class WaterListFragment extends WaterListBasePagerFragment {
     private class ApiSimulator extends AsyncTask<Void, Void, List<CalendarDay>> {
         String[] Time_Result;
 
-        ApiSimulator(String[] Time_Result){
+        ApiSimulator(String[] Time_Result) {
             this.Time_Result = Time_Result;
         }
 
         @Override
         protected List<CalendarDay> doInBackground(Void... params) {
-            try{
+            try {
                 Thread.sleep(500);
-            }catch (InterruptedException e){
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             Calendar calendar = Calendar.getInstance();
@@ -266,7 +281,7 @@ public class WaterListFragment extends WaterListBasePagerFragment {
             /*특정날짜 달력에 점표시해주는곳*/
             /*월은 0이 1월 년,일은 그대로*/
             //string 문자열인 Time_Result 을 받아와서 ,를 기준으로짜르고 string을 int 로 변환
-            for(int i = 0 ; i < Time_Result.length ; i ++){
+            for (int i = 0; i < Time_Result.length; i++) {
                 CalendarDay day = CalendarDay.from(calendar);
                 String[] time = Time_Result[i].split("-");
                 int year = Integer.parseInt(time[0]);
@@ -274,7 +289,7 @@ public class WaterListFragment extends WaterListBasePagerFragment {
                 int dayy = Integer.parseInt(time[2]);
                 dates.add(day);
                 dates.remove(today);
-                calendar.set(year,month-1,dayy);
+                calendar.set(year, month - 1, dayy);
             }
             return dates;
         }
@@ -282,7 +297,7 @@ public class WaterListFragment extends WaterListBasePagerFragment {
         @Override
         protected void onPostExecute(List<CalendarDay> calendarDays) {
             super.onPostExecute(calendarDays);
-            mMaterialCalendarView.addDecorator(new DateUtil.EventDecorator(Color.BLUE,calendarDays,WaterListFragment.this));
+            mMaterialCalendarView.addDecorator(new DateUtil.EventDecorator(Color.BLUE, calendarDays, WaterListFragment.this));
         }
     }
 

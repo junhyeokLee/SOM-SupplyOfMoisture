@@ -159,8 +159,8 @@ public class WaterGraphWeekFragment extends WaterGraphBasePagerFragment implemen
 
     private void setData(final List<WaterEntry> waters) {
 
-        mDateMonthStart.setTextColor(getResources().getColor(R.color.date_daccent));
-        mDateMonthEnd.setTextColor(getResources().getColor(R.color.date_daccent));
+//        mDateMonthStart.setTextColor(getResources().getColor(R.color.date_daccent));
+//        mDateMonthEnd.setTextColor(getResources().getColor(R.color.date_daccent));
         // 첫째주
         cal.set(Calendar.DAY_OF_WEEK, 1);
         StartDate = format.format(cal.getTime());
@@ -423,14 +423,14 @@ public class WaterGraphWeekFragment extends WaterGraphBasePagerFragment implemen
             set1 = new LineDataSet(yVals,"data Set");
             set1.setDrawValues(false);
             set1.setForm(Legend.LegendForm.EMPTY);
-            set1.setValueTextSize(20);
-            set1.setFillAlpha(50);
-            set1.setFillColor(getResources().getColor(R.color.sky2));
+            set1.setValueTextSize(12);
+//            set1.setFillAlpha(50);
+            set1.setFillColor(getResources().getColor(R.color.sky3));
             set1.setDrawFilled(true);
-            set1.setColor(getResources().getColor(R.color.sky));
-            set1.setCircleColor(getResources().getColor(R.color.sky));
-            set1.setLineWidth(1.5f);
-            set1.setCircleRadius(5f);
+            set1.setColor(getResources().getColor(R.color.sky3));
+            set1.setCircleColor(getResources().getColor(R.color.blue));
+            set1.setLineWidth(0.5f);
+            set1.setCircleRadius(3f);
             set1.setDrawCircleHole(false);
             set1.setValueTextSize(9f);
 //            ArrayList<ILineDataSet> dataSets = new ArrayList<>();

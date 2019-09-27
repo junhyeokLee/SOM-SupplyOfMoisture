@@ -28,16 +28,6 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:paddingLeft="32dp"
-                android:paddingRight="32dp"
-                android:scaleType="centerInside"
-                app:srcCompat="@drawable/state_empty" />
-
             <TextView
                 android:id="@+id/emptyText"
                 android:layout_width="wrap_content"
@@ -45,11 +35,26 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="16dp"
+                android:fontFamily="@font/nanumsquareroundl"
                 android:gravity="center"
                 android:textAlignment="center"
-                android:textColor="?android:textColorSecondary"
+                android:textColor="@color/blue"
+                android:textColorHighlight="@color/blue"
+                android:textColorHint="@color/blue"
+                android:textColorLink="@color/blue"
                 android:textSize="14sp"
                 tools:text="Go do something..." />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/state_empty" />
 
         </LinearLayout>
 

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.junhyeoklee.som.R;
+
 import android.util.Log;
 
 import java.lang.reflect.Field;
@@ -18,10 +20,12 @@ class  BottomNavigationHelper {
             shiftingMode.setAccessible(true);
             shiftingMode.setBoolean(menuView, false);
             shiftingMode.setAccessible(false);
+
             for (int i = 0; i < menuView.getChildCount(); i++) {
                 BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
 
 //                item.setShiftingMode(false);
+                item.setShifting(false);
                 // set once again checked value, so view will be updated
 
                 item.setChecked(item.getItemData().isChecked());

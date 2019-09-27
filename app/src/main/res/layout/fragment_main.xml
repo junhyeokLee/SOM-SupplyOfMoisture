@@ -56,9 +56,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|right"
-                android:fontFamily="@font/nanumbarunpenr"
+                android:fontFamily="@font/nanumsquareroundl"
                 android:text="0"
-                android:textColor="@color/navi2"
+                android:textColor="@color/blue"
                 android:textSize="64sp" />
 
             <TextView
@@ -88,9 +88,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|right"
-                android:fontFamily="@font/nanumbarunpenr"
+                android:fontFamily="@font/nanumsquareroundl"
                 android:text="0"
-                android:textColor="@color/navi2"
+                android:textColor="@color/blue"
                 android:textSize="30sp"
                 android:textStyle="normal" />
 
@@ -100,25 +100,25 @@
                 android:layout_gravity="bottom"
                 android:fontFamily="@font/nanumbarunpenr"
                 android:text=" / "
-                android:textColor="@color/navi2"
+                android:textColor="@color/blue"
                 android:textSize="30sp" />
 
             <TextView
                 android:id="@+id/tv_TotalAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nanumbarunpenr"
+                android:fontFamily="@font/nanumsquareroundl"
                 android:text="1500"
-                android:textColor="@color/navi2"
+                android:textColor="@color/blue"
                 android:textSize="30sp" />
 
             <TextView
                 android:id="@+id/dqdw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nanumbarunpenr"
+                android:fontFamily="@font/nanumsquareroundl"
                 android:text="ml"
-                android:textColor="@color/navi2"
+                android:textColor="@color/blue"
                 android:textSize="30sp" />
         </LinearLayout>
 
@@ -133,7 +133,7 @@
                 android:id="@+id/tv_Drink"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nanumbarunpenr"
+                android:fontFamily="@font/nanumsquareroundl"
                 android:max="1000"
                 android:text="0"
                 android:textColor="@color/navi2"
@@ -143,7 +143,7 @@
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nanumbarunpenr"
+                android:fontFamily="@font/nanumsquareroundl"
                 android:text="ml"
                 android:textColor="@color/navi2"
                 android:textSize="30sp" />
@@ -169,11 +169,17 @@
 
             <Button
                 android:id="@+id/btn_Drinking"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="300dp"
+                android:layout_height="60dp"
                 android:layout_weight="4.1"
-                android:fontFamily="@font/nanumbarunpenr"
-                android:text="마시기" />
+                android:background="@drawable/circle_line"
+                android:clickable="true"
+                android:fontFamily="@font/nanumsquareroundb"
+                android:text="마시기"
+                android:textColor="@android:color/white"
+                android:textColorHighlight="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:textColorLink="@android:color/white" />
 
         </LinearLayout>
 

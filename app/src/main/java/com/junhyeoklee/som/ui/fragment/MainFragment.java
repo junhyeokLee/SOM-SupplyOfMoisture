@@ -83,9 +83,19 @@ public class MainFragment extends Fragment {
         ButterKnife.bind(this, view);
         mDb = WaterDatabase.getInstance(container.getContext());
         setUpView();
-        inintLayout();
-
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setUpView();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        setUpView();
     }
 
     private void inintLayout() {
@@ -134,10 +144,15 @@ public class MainFragment extends Fragment {
     }
 
     private void populateUI(final List<WaterEntry> waters) {
+
+
         int TotalDrinkValue = 0;
         String dispPattern = "0";
         SharedPreferences pref = this.getActivity().getSharedPreferences("TotalAmount", MODE_PRIVATE);
         String TotalAmout = pref.getString("totalAmout", "");
+        if(TotalAmout == "" || TotalAmout == null){
+            TotalAmout = "1500";
+        }
 
         final DecimalFormat form = new DecimalFormat(dispPattern);
 
@@ -156,32 +171,34 @@ public class MainFragment extends Fragment {
         final int DrinkAmount = Integer.parseInt(tv_Drink.getText().toString());
         final int DrinkSumAmount = DrinkAmount + Integer.parseInt(tv_DrinkAmount.getText().toString());
         final int TotalAmount = Integer.parseInt(tv_TotalAmout.getText().toString());
+//        waveView.setProgress(TotalDrinkValue,TotalAmount);
+        int finalTotalDrinkValue = TotalDrinkValue;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (addAnimationWaveValue < finalTotalDrinkValue) {
+                    addAnimationWaveValue += 5;
+                    SystemClock.sleep(20L);
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 100% 넘었을때 100 프로 유지
+                            if (Integer.parseInt(form.format(PercentValue).toString()) >= 100) {
+                                tv_Percentage.setText("100");
+                            } else {
+                                tv_Percentage.setText(String.valueOf(form.format(PercentValue)));
+                            }
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while (addAnimationWaveValue < DrinkSumAmount) {
-//                    addAnimationWaveValue += 10;
-//                    SystemClock.sleep(20L);
-//                    handler.post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            // 100% 넘었을때 100 프로 유지
-//                            if (Integer.parseInt(form.format(PercentValue).toString()) >= 100) {
-//                                tv_Percentage.setText("100");
-//                            } else {
-//                                tv_Percentage.setText(String.valueOf(form.format(PercentValue)));
-//                            }
-//                            waveView.setProgress(addAnimationWaveValue, TotalAmount);
-//                        }
-//                    });
-//                }
-//            }
-//        }).start();
+                            waveView.setProgress(addAnimationWaveValue, TotalAmount);
+                            waveView.bringToFront();
+//                            waveView.setProgress(TotalDrinkValue, Integer.parseInt(TotalAmout));
+                        }
+                    });
+                }
+            }
+        }).start();
 
-        waveView.setProgress(TotalDrinkValue, Integer.parseInt(TotalAmout));
-        waveView.bringToFront();
-
+        inintLayout();
     }
 
     private void onDrinkButtonClicked() {
@@ -198,37 +215,12 @@ public class MainFragment extends Fragment {
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
+                if(water.getAmount() == 0){
+                    return;
+                }
                 mDb.waterDao().insertWater(water);
             }
         });
-
-//        mTotalWaveValue = DrinkSumAmount;
-        tv_DrinkAmount.setText(String.valueOf(DrinkSumAmount));
-        final double PercentValue = (double) ((double) DrinkSumAmount / TotalAmount) * 100;
-        String dispPattern = "0";
-        final DecimalFormat form = new DecimalFormat(dispPattern);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (addAnimationWaveValue < DrinkSumAmount) {
-                    addAnimationWaveValue += 10;
-                    SystemClock.sleep(20L);
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            // 100% 넘었을때 100 프로 유지
-                            if (Integer.parseInt(form.format(PercentValue).toString()) >= 100) {
-                                tv_Percentage.setText("100");
-                            } else {
-                                tv_Percentage.setText(String.valueOf(form.format(PercentValue)));
-                            }
-                            waveView.setProgress(addAnimationWaveValue, TotalAmount);
-                        }
-                    });
-                }
-            }
-        }).start();
     }
 
 }

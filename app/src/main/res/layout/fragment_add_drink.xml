@@ -77,30 +77,33 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/nanumbarunpenr"
+                    android:fontFamily="@font/nanumsquareroundl"
                     android:gravity="right"
                     android:text="Total "
-                    android:textColor="@color/sky"
-                    android:textSize="18sp" />
+                    android:textColor="@color/blue"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tv_total"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/nanumbarunpenr"
+                    android:fontFamily="@font/nanumsquareroundl"
                     android:text="0"
-                    android:textColor="@color/sky"
-                    android:textSize="18sp" />
+                    android:textColor="@color/blue"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/nanumbarunpenr"
+                    android:fontFamily="@font/nanumsquareroundl"
                     android:gravity="center"
                     android:text=" ml"
-                    android:textColor="@color/sky"
-                    android:textSize="18sp" />
+                    android:textColor="@color/blue"
+                    android:textColorHighlight="@color/blue"
+                    android:textColorHint="@color/blue"
+                    android:textColorLink="@color/blue"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -112,6 +115,58 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:clipToPadding="false" />
+
+        <LinearLayout
+            android:id="@+id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingBottom="64dp">
+
+                <TextView
+                    android:id="@+id/emptyText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginRight="16dp"
+                    android:fontFamily="@font/nanumsquareroundl"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:textColor="@color/blue"
+                    android:textColorHighlight="@color/blue"
+                    android:textColorHint="@color/blue"
+                    android:textColorLink="@color/blue"
+                    android:textSize="14sp"
+                    tools:text="Go do something..." />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:paddingLeft="32dp"
+                    android:paddingRight="32dp"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/empty_water" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
     </LinearLayout>
     <!--</com.sothree.slidinguppanel.SlidingUpPanelLayout>-->
 

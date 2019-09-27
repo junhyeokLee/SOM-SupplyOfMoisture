@@ -71,28 +71,29 @@
                     style="@style/TextAppearance.AppCompat.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/nanumbarunpenr"
+                    android:fontFamily="@font/nanumsquareroundl"
                     android:textColor="@color/blue"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     tools:text="100 " />
 
                 <TextView
                     android:id="@+id/textView6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanumsquareroundl"
                     android:text=" ml"
                     android:textColor="@color/blue"
-                    android:textSize="24sp" />
+                    android:textSize="22sp" />
 
                 <TextView
                     android:id="@+id/taskUpdatedAt"
                     style="@style/TextAppearance.AppCompat.Small"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/nanumbarunpenr"
+                    android:fontFamily="@font/nanumsquareroundl"
                     android:gravity="center"
                     android:textColor="@color/blue"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     tools:text="11/11/1111" />
 
             </LinearLayout>

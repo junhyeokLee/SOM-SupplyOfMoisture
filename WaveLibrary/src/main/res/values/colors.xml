@@ -6,9 +6,9 @@
     <color name="red">#f16d7a</color>
     <color name="green">#b7d28d</color>
     <color name="holo_purple">#ffaa66cc</color>
-    <color name="sky">#0099ff</color>
+    <color name="sky">#0099FF</color>
     <color name="sky2">#3385ff</color>
-
+    <color name="sky3">#66ccff</color>
     <color name="mint">#00ffff</color>
     <color name="lightsky">#b3ecff</color>
     <color name="navilight">#6927ff</color>

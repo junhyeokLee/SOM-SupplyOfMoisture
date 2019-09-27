@@ -19,13 +19,19 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"
+        style="@style/Widget.Design.BottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/background_light"
         android:layout_alignParentBottom="true"
-        app:layout_behavior="tech.thdev.app.view.BottomNavigationBehavior"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="@android:color/white"
+        android:backgroundTint="@android:color/white"
+        android:theme="@style/Widget.BottomNavigationView"
+        app:labelVisibilityMode="labeled"
         app:itemIconTint="@drawable/nav_item_color_state"
         app:itemTextColor="@drawable/nav_item_color_state"
+        app:layout_behavior="tech.thdev.app.view.BottomNavigationBehavior"
         app:menu="@menu/navigation" />
 
 </RelativeLayout>

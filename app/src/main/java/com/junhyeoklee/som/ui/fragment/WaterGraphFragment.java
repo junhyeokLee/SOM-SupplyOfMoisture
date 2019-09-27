@@ -141,7 +141,7 @@ public class WaterGraphFragment extends WaterGraphBasePagerFragment {
 
     private void TotalWaterAmout(final List<WaterEntry> waters) {
         float TotalDrinkValue = 0;
-        mDateYear.setTextColor(getResources().getColor(R.color.date_daccent));
+//        mDateYear.setTextColor(getResources().getColor(R.color.date_daccent));
         getCurrentYear = sdfYears.format(graphDate);
         getYears = sdfYears.format(graphDate);
         mDateYear.setText(getYears);
@@ -356,8 +356,7 @@ public class WaterGraphFragment extends WaterGraphBasePagerFragment {
             set1.setColors(ColorTemplate.VORDIPLOM_COLORS);
             set1.setDrawValues(false);
             set1.setForm(Legend.LegendForm.EMPTY);
-
-            set1.setColor(getResources().getColor(R.color.sky));
+            set1.setColor(getResources().getColor(R.color.sky3));
             ArrayList<IBarDataSet> dataSets = new ArrayList<>();
             dataSets.add(set1);
 
@@ -367,7 +366,7 @@ public class WaterGraphFragment extends WaterGraphBasePagerFragment {
             data.setValueFormatter(custom);
             data.setValueTextSize(10f);
             data.setHighlightEnabled(true);
-            data.setBarWidth(1f);
+            data.setBarWidth(0.5f);
             barChart.setTouchEnabled(true);
             barChart.setData(data);
             barChart.setFitBars(true);
