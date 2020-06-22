@@ -6,7 +6,7 @@
 <li>WaveLibrary</li>
 <li>Room</li>
 <li>LiveData</li>
-<li>ViewModel</li>
+<li>AAC-ViewModel</li>
 <li>butterknife</li>
 <br><br>
 <div>
