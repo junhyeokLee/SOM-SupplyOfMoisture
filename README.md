@@ -4,7 +4,6 @@
 
 <h3>Library</h3>
 <li>WaveLibrary</li>
-<li>material</li>
 <li>Room</li>
 <li>LiveData</li>
 <li>ViewModel</li>
