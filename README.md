@@ -9,12 +9,12 @@
 <li>LiveData</li>
 <li>ViewModel</li>
 <li>butterknife</li>
-
+<br><br>
 <div>
-<img width="200" src="">
-<img width="200" src="">
-  <img width="200" src="">
-  <img width="200" src="">
+<img width="200" alt="스크린샷 2020-06-22 오후 2 55 11" src="https://user-images.githubusercontent.com/32924058/85253280-ccaadd80-b498-11ea-9653-43259c32d87b.png">
+<img width="200" alt="스크린샷 2020-06-22 오후 2 56 13" src="https://user-images.githubusercontent.com/32924058/85253289-cf0d3780-b498-11ea-8b40-b759caeba814.png">
+<img width="200" alt="스크린샷 2020-06-22 오후 2 56 42" src="https://user-images.githubusercontent.com/32924058/85253292-d03e6480-b498-11ea-988f-bfe3ba5648d0.png">
+<img width="200" alt="스크린샷 2020-06-22 오후 2 57 03" src="https://user-images.githubusercontent.com/32924058/85253293-d0d6fb00-b498-11ea-9be5-f50db66ee3dd.png">
 </div>
 
 
